@@ -2,7 +2,6 @@ from typing import TypeVar
 
 import uvicorn
 
-
 T = TypeVar("T")
 
 
