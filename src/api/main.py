@@ -1,6 +1,6 @@
 from blacksheep import Application
 
-from clean_architecture_ddd.api.docs.main import setup_docs
+from src.api.docs.main import setup_docs
 
 
 def build_api() -> Application:

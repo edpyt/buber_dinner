@@ -2,7 +2,7 @@ from blacksheep import Response
 from blacksheep.server.controllers import APIController, post
 from blacksheep.server.responses import ok
 
-from clean_architecture_ddd.contracts.authentication import (
+from src.contracts.authentication import (
     LoginRequest,
     RegisterRequest,
 )

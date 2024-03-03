@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["edpyt <edrsa1321s@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -12,6 +13,7 @@ uvicorn = "^0.27.1"
 structlog = "^24.1.0"
 pydantic = "^2.6.3"
 asyncpg = "^0.29.0"
+rodi = "^2.0.6"
 
 
 [tool.poetry.group.test.dependencies]
@@ -25,7 +27,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 79
 src = ["src"]
-include = ["clean_architecture_ddd/**.py", "tests/**.py"]
+include = ["src/**.py", "tests/**.py"]
 
 [tool.ruff.lint]
 select = ["ALL"]

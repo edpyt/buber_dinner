@@ -3,7 +3,7 @@ from typing import AsyncGenerator
 import pytest
 from blacksheep import Application
 from blacksheep.testing import TestClient
-from clean_architecture_ddd.api import build_api
+from src.api import build_api
 
 
 @pytest.fixture(name="app", scope="session")

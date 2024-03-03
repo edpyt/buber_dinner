@@ -1,2 +1,2 @@
 run:
-	python -m clean_architecture_ddd
+	python -m src
