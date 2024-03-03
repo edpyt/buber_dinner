@@ -8,7 +8,9 @@ from src.application.services.authentication.service import (
 )
 
 
-def build_application_dependencies() -> Container:
+def build_application_container() -> Container:
     container: Container = Container()
 
     container.register(IAuthenticationService, AuthenticationService)
+
+    return container
