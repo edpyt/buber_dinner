@@ -1,16 +1,15 @@
-from typing import TypeVar
+import os
 
 import uvicorn
 
-T = TypeVar("T")
+
+def start_application() -> None:
+    uvicorn.run(
+        "clean_architecture_ddd.api.main:build_api",
+        reload=bool(os.environ.get("APP_RELOAD", True)),
+        factory=True,
+    )
 
 
-def start_application(app: T) -> None:
-    uvicorn.run(app)
-
-
-if __name__ ==  "__main__":
-    from clean_architecture_ddd.api.main import build_api
-
-    app = build_api()
-    start_application(app)
+if __name__ == "__main__":
+    start_application()
