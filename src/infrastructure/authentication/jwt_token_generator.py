@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from uuid import UUID
 
 import jwt
@@ -6,9 +6,14 @@ import jwt
 from src.application.common.interfaces.authentication import (
     IJwtTokenGenerator,
 )
+from src.application.common.interfaces.services.dt_provider import (
+    IDateTimeProvider,
+)
 
 
 class JwtTokenGenerator(IJwtTokenGenerator):
+    _dt_provider: IDateTimeProvider
+
     def generate_token(
         self,
         user_id: UUID,
@@ -20,7 +25,7 @@ class JwtTokenGenerator(IJwtTokenGenerator):
                 "sub": str(user_id),
                 "given_name": first_name,
                 "family_name": last_name,
-                "exp": datetime.now() + timedelta(days=1),  # noqa: DTZ005
+                "exp": self._dt_provider.utc_now() + timedelta(minutes=60),
             },
             "super-secret-key",
         )
