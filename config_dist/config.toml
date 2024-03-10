@@ -1,0 +1,3 @@
+[jwt_settings]
+jwt_secret = "secret"
+expiry_minutes = 0
