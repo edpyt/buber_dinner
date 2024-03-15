@@ -22,34 +22,34 @@ class AuthenticationController(APIController):
     def route(cls) -> str:
         return "auth"
 
+    @classmethod
+    def version(cls) -> str:
+        return "v1"
+
     @post("register")
-    def register(self, auth_request: RegisterRequest) -> Response:
-        auth_result = self.authentication_service.register(
+    async def register(self, auth_request: RegisterRequest) -> Response:
+        auth_result = await self.authentication_service.register(
             **auth_request.model_dump(),
         )
         response = AuthenticationResponse(
-            id=auth_result.id,
-            first_name=auth_result.first_name,
-            last_name=auth_result.last_name,
-            email=auth_result.email,
+            id=auth_result.user.id,
+            first_name=auth_result.user.first_name,
+            last_name=auth_result.user.last_name,
+            email=auth_result.user.email,
             token=auth_result.token,
         )
         return ok(response)
 
     @post("login")
-    def login(self, auth_request: LoginRequest) -> Response:
-        auth_result = self.authentication_service.login(
+    async def login(self, auth_request: LoginRequest) -> Response:
+        auth_result = await self.authentication_service.login(
             **auth_request.model_dump(),
         )
         response = AuthenticationResponse(
-            id=auth_result.id,
-            first_name=auth_result.first_name,
-            last_name=auth_result.last_name,
-            email=auth_result.email,
+            id=auth_result.user.id,
+            first_name=auth_result.user.first_name,
+            last_name=auth_result.user.last_name,
+            email=auth_result.user.email,
             token=auth_result.token,
         )
         return ok(response)
-
-    @classmethod
-    def version(cls) -> str:
-        return "v1"

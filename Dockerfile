@@ -13,4 +13,4 @@ RUN poetry config virtualenvs.create false
 
 COPY ./src /app/src
 
-RUN poetry install --only main
+RUN poetry install

@@ -1,11 +1,9 @@
 from dataclasses import dataclass
-from uuid import UUID
+
+from src.domain.entities.user import User
 
 
 @dataclass
 class AuthenticationResult:
-    id: UUID
-    first_name: str
-    last_name: str
-    email: str
+    user: User
     token: str

@@ -1,9 +1,8 @@
 from typing import Protocol
-from uuid import UUID
+
+from src.domain.entities.user import User
 
 
 class IJwtTokenGenerator(Protocol):
-    def generate_token(
-        self, user_id: UUID, first_name: str, last_name: str,
-    ) -> None:
+    def generate_token(self, user: User) -> None:
         ...

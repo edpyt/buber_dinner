@@ -17,7 +17,9 @@ async def test_register_user(test_client: TestClient) -> None:
     )
     response_data = await response.json()
     decoded_jwt = jwt.decode(
-        response_data["token"], "test-secret", algorithms=["HS256"],
+        response_data["token"],
+        "test-secret",
+        algorithms=["HS256"],
     )
 
     assert response.status == 200
