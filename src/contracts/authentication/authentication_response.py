@@ -1,9 +1,9 @@
+from dataclasses import dataclass
 from uuid import UUID
 
-from pydantic import BaseModel
 
-
-class AuthenticationResponse(BaseModel):
+@dataclass
+class AuthenticationResponse:
     id: UUID
     first_name: str
     last_name: str

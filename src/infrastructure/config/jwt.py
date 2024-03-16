@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass(frozen=True)
-class JWTConfig:
+class JWTConfig(BaseModel):
     jwt_secret: str
     expiry_minutes: int

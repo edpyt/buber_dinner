@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class RegisterRequest(BaseModel):
+@dataclass
+class RegisterRequest:
     first_name: str
     last_name: str
     email: str

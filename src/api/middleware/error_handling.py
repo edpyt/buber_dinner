@@ -19,8 +19,8 @@ class ErrorHandlingMiddleware:
 
     async def handle_exception(self, exception: Exception) -> Response:
         problem_details = ProblemDetails(
-            "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
-            str(exception),
-            500,
+            type="https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
+            title=str(exception),
+            status=500,
         )
         return ProblemDetailsResponse(problem_details=problem_details).result

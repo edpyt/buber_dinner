@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from blacksheep import Response
 from blacksheep.server.controllers import APIController, post
 from blacksheep.server.responses import ok
@@ -29,7 +30,7 @@ class AuthenticationController(APIController):
     @post("register")
     async def register(self, auth_request: RegisterRequest) -> Response:
         auth_result = await self.authentication_service.register(
-            **auth_request.model_dump(),
+            **asdict(auth_request),
         )
         response = AuthenticationResponse(
             id=auth_result.user.id,
@@ -43,7 +44,7 @@ class AuthenticationController(APIController):
     @post("login")
     async def login(self, auth_request: LoginRequest) -> Response:
         auth_result = await self.authentication_service.login(
-            **auth_request.model_dump(),
+            **asdict(auth_request),
         )
         response = AuthenticationResponse(
             id=auth_result.user.id,

@@ -1,12 +1,12 @@
-from dataclasses import dataclass
 from pathlib import Path
+
+from pydantic import BaseModel
 
 from src.infrastructure.config.jwt import JWTConfig
 from src.infrastructure.config_loader import read_toml
 
 
-@dataclass(frozen=True)
-class Config:
+class Config(BaseModel):
     jwt_config: JWTConfig
 
 

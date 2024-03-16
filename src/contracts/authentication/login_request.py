@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class LoginRequest(BaseModel):
+@dataclass
+class LoginRequest:
     email: str
     password: str

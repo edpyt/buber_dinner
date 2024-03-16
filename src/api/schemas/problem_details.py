@@ -1,18 +1,14 @@
-from dataclasses import asdict, dataclass
-from json import dumps
-
 from blacksheep import Content, Response
+from pydantic import BaseModel, Field
 
 
-@dataclass(frozen=True)
-class ProblemDetails:
-    type: str
+class ProblemDetails(BaseModel):
+    type_: str = Field(alias="type")
     title: str
     status: int
 
 
-@dataclass(frozen=True)
-class ProblemDetailsResponse:
+class ProblemDetailsResponse(BaseModel):
     problem_details: ProblemDetails
 
     @property
@@ -21,6 +17,6 @@ class ProblemDetailsResponse:
             self.problem_details.status,
             content=Content(
                 b"application/problem+json",
-                dumps(asdict(self.problem_details)).encode("utf8"),
+                self.problem_details.model_dump_json().encode("utf8"),
             ),
         )
