@@ -25,8 +25,10 @@ def create_app(jwt_config: JWTConfig) -> Application:
 
 
 @pytest.fixture(name="user_repo")
-async def create_user_repository() -> IUserRepository:
-    return UserRepository()
+async def create_user_repository() -> AsyncGenerator[IUserRepository, None]:
+    user_repo = UserRepository()
+    yield user_repo
+    user_repo.users.clear()
 
 
 @pytest.fixture
