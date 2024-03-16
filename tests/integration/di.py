@@ -1,7 +1,20 @@
+from dataclasses import dataclass
+from typing import Any, Protocol, Sequence
+
 from blacksheep import Application
-from src.infrastructure.config.jwt import JWTConfig
 
 
-def setup_test_di(app: Application, jwt_config: JWTConfig) -> None:
-    del app.services._map[JWTConfig]  # noqa: SLF001
-    app.services.add_instance(jwt_config)
+@dataclass
+class DIOverride:
+    value: Any
+    type_: Protocol | None = None
+
+
+def setup_test_di(app: Application, *di_overrides: Sequence[DIOverride]) -> None:
+    for di_override in di_overrides:
+        if di_override.type_:
+            del app.services._map[di_override.type_]  # noqa: SLF001
+            app.services.add_instance(di_override.value, di_override.type_)
+        else:
+            del app.services._map[type(di_override.value)]  # noqa: SLF001
+            app.services.add_instance(di_override.value)

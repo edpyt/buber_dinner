@@ -4,11 +4,12 @@ import pytest
 from blacksheep import Application
 from blacksheep.testing import TestClient
 from src.api import build_api
+from src.application.persistence.user_repo import IUserRepository
 from src.domain.entities.user import User
 from src.infrastructure.config.jwt import JWTConfig
 from src.infrastructure.persistence.user_repo import UserRepository
 
-from tests.integration.di import setup_test_di
+from tests.integration.di import DIOverride, setup_test_di
 
 
 @pytest.fixture(scope="session")
@@ -19,20 +20,24 @@ def jwt_config() -> JWTConfig:
 @pytest.fixture(name="app", scope="session")
 def create_app(jwt_config: JWTConfig) -> Application:
     app: Application = build_api()
-    setup_test_di(app, jwt_config)
+    setup_test_di(app, DIOverride(jwt_config))
     return app
 
 
+@pytest.fixture(name="user_repo")
+async def create_user_repository() -> IUserRepository:
+    return UserRepository()
+
+
 @pytest.fixture
-async def test_client(app: Application) -> AsyncGenerator[TestClient, None]:
+async def test_client(
+    app: Application,
+    user_repo: IUserRepository,
+) -> AsyncGenerator[TestClient, None]:
+    setup_test_di(app, DIOverride(user_repo, IUserRepository))
     await app.start()
     client: TestClient = TestClient(app)
     return client
-
-
-@pytest.fixture(name="user_repo")
-async def create_user_repository() -> UserRepository:
-    return UserRepository()
 
 
 @pytest.fixture
