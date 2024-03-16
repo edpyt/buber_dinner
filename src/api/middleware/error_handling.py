@@ -3,7 +3,8 @@ from typing import Awaitable, Callable
 
 from blacksheep import Request, Response
 
-from src.api.schemas.problem_details import ProblemDetails, ProblemDetailsResponse
+from src.api.common.errors.problem_details import ProblemDetails, ProblemResponse
+from src.application.common.errors.service_exception import IServiceException
 
 
 class ErrorHandlingMiddleware:
@@ -21,9 +22,13 @@ class ErrorHandlingMiddleware:
         return response
 
     async def handle_exception(self, exception: Exception) -> Response:
+        if isinstance(exception, IServiceException):
+            status_code = exception.status_code
+        else:
+            status_code = 500
+
         problem_details = ProblemDetails(
-            type="https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
             title=str(exception),
-            status=500,
+            status=status_code,
         )
-        return ProblemDetailsResponse(problem_details=problem_details).result
+        return ProblemResponse(problem_details=problem_details)

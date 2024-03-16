@@ -1,3 +1,8 @@
+from src.application.common.errors import (
+    DuplicateEmailError,
+    InvalidPasswordError,
+    UserDoesNotExistError,
+)
 from src.application.common.interfaces.authentication import (
     IJwtTokenGenerator,
 )
@@ -18,9 +23,9 @@ class AuthenticationService(IAuthenticationService):
         user = await self._user_repository.get_user_by_email(email)
 
         if not user:
-            raise Exception("User with given email does not exist.")
+            raise UserDoesNotExistError
         if user.password != password:
-            raise Exception("Invalid password.")
+            raise InvalidPasswordError
 
         token = self._jwt_token_generator.generate_token(user)
 
@@ -34,7 +39,7 @@ class AuthenticationService(IAuthenticationService):
         password: str,
     ) -> AuthenticationResult:
         if await self._user_repository.get_user_by_email(email):
-            raise Exception("User with given email already exists.")
+            raise DuplicateEmailError
 
         user = User(
             first_name=first_name,

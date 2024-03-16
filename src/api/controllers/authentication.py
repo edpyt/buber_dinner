@@ -1,4 +1,5 @@
 from dataclasses import asdict
+
 from blacksheep import Response
 from blacksheep.server.controllers import APIController, post
 from blacksheep.server.responses import ok

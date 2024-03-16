@@ -1,5 +1,4 @@
 from datetime import timedelta
-from uuid import UUID
 
 import jwt
 
