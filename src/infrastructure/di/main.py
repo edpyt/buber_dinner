@@ -7,9 +7,13 @@ from src.application.common.interfaces import (
     IJwtTokenGenerator,
 )
 from src.application.persistence.user_repo import IUserRepository
-from src.application.services.authentication import (
-    AuthenticationService,
-    IAuthenticationService,
+from src.application.services.authentication.commands import (
+    AuthenticationCommandService,
+    IAuthenticationCommandService,
+)
+from src.application.services.authentication.queries import (
+    AuthenticationQueryService,
+    IAuthenticationQueryService,
 )
 from src.infrastructure.authentication import JwtTokenGenerator
 from src.infrastructure.persistence.user_repo import UserRepository
@@ -21,11 +25,11 @@ def build_application_container() -> Container:
 
     container.add_instance(logging.getLogger(__name__), logging.Logger)
 
-    container.register(IAuthenticationService, AuthenticationService)
-
     container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
     container.add_singleton(IDateTimeProvider, DateTimeProvider)
 
+    container.add_scoped(IAuthenticationCommandService, AuthenticationCommandService)
+    container.add_scoped(IAuthenticationQueryService, AuthenticationQueryService)
     container.add_scoped(IUserRepository, UserRepository)
 
     return container

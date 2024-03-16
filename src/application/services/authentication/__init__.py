@@ -1,5 +1,3 @@
-from .interface import IAuthenticationService
-from .result import AuthenticationResult
-from .service import AuthenticationService
+from .common.result import AuthenticationResult
 
-__all__ = ("IAuthenticationService", "AuthenticationResult", "AuthenticationService")
+__all__ = ("AuthenticationResult",)

@@ -4,7 +4,8 @@ from blacksheep import Response
 from blacksheep.server.controllers import APIController, post
 from blacksheep.server.responses import ok
 
-from src.application.services.authentication import IAuthenticationService
+from src.application.services.authentication.commands import IAuthenticationCommandService
+from src.application.services.authentication.queries import IAuthenticationQueryService
 from src.contracts.authentication import (
     AuthenticationResponse,
     LoginRequest,
@@ -13,8 +14,8 @@ from src.contracts.authentication import (
 
 
 class AuthenticationController(APIController):
-    def __init__(self, authentication_service: IAuthenticationService) -> None:
-        self.authentication_service = authentication_service
+    authentication_command_service: IAuthenticationCommandService
+    authentication_query_service: IAuthenticationQueryService
 
     @classmethod
     def route(cls) -> str:
@@ -26,7 +27,7 @@ class AuthenticationController(APIController):
 
     @post("register")
     async def register(self, auth_request: RegisterRequest) -> Response:
-        auth_result = await self.authentication_service.register(
+        auth_result = await self.authentication_command_service.register(
             **asdict(auth_request),
         )
         response = AuthenticationResponse(
@@ -40,7 +41,7 @@ class AuthenticationController(APIController):
 
     @post("login")
     async def login(self, auth_request: LoginRequest) -> Response:
-        auth_result = await self.authentication_service.login(
+        auth_result = await self.authentication_query_service.login(
             **asdict(auth_request),
         )
         response = AuthenticationResponse(

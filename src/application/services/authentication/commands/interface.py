@@ -1,12 +1,9 @@
 from typing import Protocol
 
-from .result import AuthenticationResult
+from src.application.services.authentication import AuthenticationResult
 
 
-class IAuthenticationService(Protocol):
-    async def login(self, email: str, password: str) -> AuthenticationResult:
-        ...
-
+class IAuthenticationCommandService(Protocol):
     async def register(
         self,
         first_name: str,
