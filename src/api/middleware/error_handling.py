@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import Awaitable, Callable
 
 from blacksheep import Request, Response
@@ -10,11 +11,13 @@ class ErrorHandlingMiddleware:
         self,
         request: Request,
         handler: Callable[[Request], Awaitable[Response]],
+        logger: Logger,
     ) -> Response:
         try:
             response: Response = await handler(request)
         except Exception as e:  # noqa: BLE001
             response: Response = await self.handle_exception(e)
+            logger.error(e)  # noqa: TRY401, TRY400, RUF100
         return response
 
     async def handle_exception(self, exception: Exception) -> Response:

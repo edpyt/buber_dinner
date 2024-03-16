@@ -1,3 +1,5 @@
+import logging
+
 from rodi import Container
 
 from src.application.common.interfaces.authentication import IJwtTokenGenerator
@@ -19,7 +21,10 @@ from src.infrastructure.services.dt_provider import DateTimeProvider
 def build_application_container() -> Container:
     container: Container = Container()
 
+    container.add_instance(logging.getLogger(__name__), logging.Logger)
+
     container.register(IAuthenticationService, AuthenticationService)
+
     container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
     container.add_singleton(IDateTimeProvider, DateTimeProvider)
 
