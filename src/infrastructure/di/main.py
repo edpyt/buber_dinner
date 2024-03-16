@@ -2,16 +2,14 @@ import logging
 
 from rodi import Container
 
-from src.application.common.interfaces.authentication import IJwtTokenGenerator
-from src.application.common.interfaces.services.dt_provider import (
+from src.application.common.interfaces import (
     IDateTimeProvider,
+    IJwtTokenGenerator,
 )
 from src.application.persistence.user_repo import IUserRepository
-from src.application.services.authentication.interface import (
-    IAuthenticationService,
-)
-from src.application.services.authentication.service import (
+from src.application.services.authentication import (
     AuthenticationService,
+    IAuthenticationService,
 )
 from src.infrastructure.authentication import JwtTokenGenerator
 from src.infrastructure.persistence.user_repo import UserRepository

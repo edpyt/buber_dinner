@@ -3,13 +3,9 @@ from src.application.common.errors import (
     InvalidPasswordError,
     UserDoesNotExistError,
 )
-from src.application.common.interfaces.authentication import (
-    IJwtTokenGenerator,
-)
+from src.application.common.interfaces import IJwtTokenGenerator
 from src.application.persistence.user_repo import IUserRepository
-from src.application.services.authentication.result import (
-    AuthenticationResult,
-)
+from src.application.services.authentication import AuthenticationResult
 from src.domain.entities.user import User
 
 from .interface import IAuthenticationService

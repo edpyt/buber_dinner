@@ -1,8 +1,6 @@
 from datetime import datetime
 
-from src.application.common.interfaces.services.dt_provider import (
-    IDateTimeProvider,
-)
+from src.application.common.interfaces import IDateTimeProvider
 
 
 class DateTimeProvider(IDateTimeProvider):

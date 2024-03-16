@@ -4,15 +4,11 @@ from blacksheep import Response
 from blacksheep.server.controllers import APIController, post
 from blacksheep.server.responses import ok
 
-from src.application.services.authentication.interface import (
-    IAuthenticationService,
-)
+from src.application.services.authentication import IAuthenticationService
 from src.contracts.authentication import (
+    AuthenticationResponse,
     LoginRequest,
     RegisterRequest,
-)
-from src.contracts.authentication.authentication_response import (
-    AuthenticationResponse,
 )
 
 

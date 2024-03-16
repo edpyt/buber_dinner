@@ -2,12 +2,7 @@ from datetime import timedelta
 
 import jwt
 
-from src.application.common.interfaces.authentication import (
-    IJwtTokenGenerator,
-)
-from src.application.common.interfaces.services.dt_provider import (
-    IDateTimeProvider,
-)
+from src.application.common.interfaces import IDateTimeProvider, IJwtTokenGenerator
 from src.domain.entities.user import User
 from src.infrastructure.config.jwt import JWTConfig
 
