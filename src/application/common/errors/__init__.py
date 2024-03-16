@@ -1,6 +1,6 @@
 from .duplicate_email import DuplicateEmailError
-from .email_not_exist import UserDoesNotExistError
 from .invalid_password import InvalidPasswordError
+from .user_not_exist import UserDoesNotExistError
 
 __all__ = (
     "DuplicateEmailError",
