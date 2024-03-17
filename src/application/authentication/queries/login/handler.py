@@ -1,24 +1,22 @@
-from src.application.common.errors import (
-    InvalidPasswordError,
-    UserDoesNotExistError,
-)
+from src.application.common.errors.invalid_password import InvalidPasswordError
+from src.application.common.errors.user_not_exist import UserDoesNotExistError
 from src.application.common.interfaces import IJwtTokenGenerator
 from src.application.persistence.user_repo import IUserRepository
 from src.application.services.authentication import AuthenticationResult
 
-from .interface import IAuthenticationQueryService
+from .query import LoginQuery
 
 
-class AuthenticationQueryService(IAuthenticationQueryService):
+class LoginQueryHandler:
     _jwt_token_generator: IJwtTokenGenerator
     _user_repository: IUserRepository
 
-    async def login(self, email: str, password: str) -> AuthenticationResult:
-        user = await self._user_repository.get_user_by_email(email)
+    async def handle(self, query: LoginQuery) -> AuthenticationResult:
+        user = await self._user_repository.get_user_by_email(query.email)
 
         if not user:
             raise UserDoesNotExistError
-        if user.password != password:
+        if user.password != query.password:
             raise InvalidPasswordError
 
         token = self._jwt_token_generator.generate_token(user)

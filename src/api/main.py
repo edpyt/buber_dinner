@@ -5,6 +5,7 @@ from src.api.docs.main import setup_docs
 from src.api.middleware import ErrorHandlingMiddleware, setup_middlewares
 from src.infrastructure.di.main import build_application_container
 from src.infrastructure.log.main import configure_logging
+from src.infrastructure.main import setup_mediatr
 
 
 def build_api() -> Application:
@@ -22,5 +23,8 @@ def setup_app(app: Application) -> None:
     """Before start application"""
 
     configure_logging()
+
+    setup_mediatr()
+
     setup_docs(app)
     setup_middlewares(app, ErrorHandlingMiddleware())
