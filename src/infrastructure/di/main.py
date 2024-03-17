@@ -1,7 +1,9 @@
 import logging
 
+from mediatr import Mediator
 from rodi import Container
 
+from src.application.authentication.register.handler import RegisterCommandHandler
 from src.application.common.interfaces import (
     IDateTimeProvider,
     IJwtTokenGenerator,
@@ -24,6 +26,11 @@ def build_application_container() -> Container:
     container: Container = Container()
 
     container.add_instance(logging.getLogger(__name__), logging.Logger)
+    container.add_instance(
+        Mediator(
+            handler_class_manager=lambda class_: container.resolve(class_),
+        ),
+    )
 
     container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
     container.add_singleton(IDateTimeProvider, DateTimeProvider)
@@ -31,5 +38,7 @@ def build_application_container() -> Container:
     container.add_scoped(IAuthenticationCommandService, AuthenticationCommandService)
     container.add_scoped(IAuthenticationQueryService, AuthenticationQueryService)
     container.add_scoped(IUserRepository, UserRepository)
+
+    container.register(RegisterCommandHandler)
 
     return container

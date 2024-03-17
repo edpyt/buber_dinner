@@ -28,7 +28,6 @@ class AuthenticationController(APIController):
     async def register(self, auth_request: RegisterRequest) -> Response:
         command = RegisterCommand(**asdict(auth_request))
 
-        await self.mediator.send_async(command)
         auth_result = await self.mediator.send_async(command)
 
         response = AuthenticationResponse(
