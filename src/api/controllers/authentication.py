@@ -5,7 +5,8 @@ from blacksheep.server.controllers import APIController, post
 from blacksheep.server.responses import ok
 from mediatr import Mediator
 
-from src.application.authentication.register.command import RegisterCommand
+from src.application.authentication.commands.register.command import RegisterCommand
+from src.application.authentication.queries.login.query import LoginQuery
 from src.contracts.authentication import (
     AuthenticationResponse,
     LoginRequest,
@@ -41,9 +42,10 @@ class AuthenticationController(APIController):
 
     @post("login")
     async def login(self, auth_request: LoginRequest) -> Response:
-        auth_result = await self.authentication_query_service.login(
-            **asdict(auth_request),
-        )
+        query = LoginQuery(**asdict(auth_request))
+
+        auth_result = await self.mediator.send_async(query)
+
         response = AuthenticationResponse(
             id=auth_result.user.id,
             first_name=auth_result.user.first_name,
