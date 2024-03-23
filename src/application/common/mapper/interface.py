@@ -9,11 +9,7 @@ from src.contracts.authentication.register_request import RegisterRequest
 
 
 class Mapper(Protocol):
-    def convert_register_request_to_command(
-        self,
-        src: RegisterRequest,
-        dst: RegisterCommand,
-    ) -> RegisterCommand:
+    def convert_register_request_to_command(self, src: RegisterRequest) -> RegisterCommand:
         ...
 
     def convert_login_request_to_query(self, src: LoginRequest) -> LoginQuery:
