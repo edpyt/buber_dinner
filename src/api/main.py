@@ -12,6 +12,7 @@ def build_api() -> Application:
     """Build BlackSheep application"""
 
     di_container = build_application_container()
+    setup_mediatr()
     setup_api_di(di_container)
 
     app = Application(services=di_container, show_error_details=True)
@@ -23,8 +24,6 @@ def setup_app(app: Application) -> None:
     """Before start application"""
 
     configure_logging()
-
-    setup_mediatr()
 
     setup_docs(app)
     setup_middlewares(app, ErrorHandlingMiddleware())
