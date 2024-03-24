@@ -1,15 +1,9 @@
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Protocol, TypeVar
 
 from src.application.authentication.commands.register.command import RegisterCommand
 
 T = TypeVar("T")
-C = TypeVar("C")
-
-
-class AbstractValidator(Generic[T]):
-    def validate(self, command: C) -> None:
-        ...
 
 
 @dataclass
@@ -18,27 +12,32 @@ class ValidationResult:
     result: list[str]
 
 
-class RegisterCommandValidator(AbstractValidator[RegisterCommand]):
-    def validate(self, command: RegisterCommand) -> ValidationResult:
+class Validator(Protocol[T]):
+    def validate(self, request: T) -> ValidationResult:
+        ...
+
+
+class RegisterCommandValidator(Validator[RegisterCommand]):
+    def validate(self, request: RegisterCommand) -> ValidationResult:
         errors = []
 
         try:
-            assert len(command.first_name) > 0, "First name should be greater than zero"
+            assert len(request.first_name) > 0, "First name should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 
         try:
-            assert len(command.last_name) > 0, "Last name should be greater than zero"
+            assert len(request.last_name) > 0, "Last name should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 
         try:
-            assert len(command.email) > 0, "Email should be greater than zero"
+            assert len(request.email) > 0, "Email should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 
         try:
-            assert len(command.password) > 0, "Password should be greater than zero"
+            assert len(request.password) > 0, "Password should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 

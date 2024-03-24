@@ -16,9 +16,9 @@ class ErrorHandlingMiddleware:
     ) -> Response:
         try:
             response: Response = await handler(request)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             response: Response = await self.handle_exception(e)
-            logger.error(e)  # noqa: TRY401, TRY400, RUF100
+            logger.exception(e)  # noqa: TRY401, TRY400, RUF100
         return response
 
     async def handle_exception(self, exception: Exception) -> Response:

@@ -1,17 +1,17 @@
-from typing import Any, Coroutine
+from typing import Any, Coroutine, Generic, TypeVar
 
-from src.application.authentication.commands.register.command import RegisterCommand
+from .command_validator import Validator
 
-from .command_validator import RegisterCommandValidator
+TRequest = TypeVar("TRequest")
 
 
-class ValidateRegisterCommandBehavior:
-    _validator: RegisterCommandValidator
+class ValidationBehavior(Generic[TRequest]):
+    def __init__(self, validator: Validator[TRequest]) -> None:
+        self._validator = validator
 
-    async def handle(self, request: RegisterCommand, next_: Coroutine) -> Any:
+    async def handle(self, request: TRequest, next_: Coroutine) -> Any:
         validation_result = self._validator.validate(request)
-
         if validation_result.is_valid:
             return await next_()
         errors: list[str] = validation_result.result
-        return errors
+        raise ValueError(f"Errors: {', '.join(errors)}.")

@@ -1,16 +1,17 @@
 import logging
 
 from adaptix import Retort
-from rodi import Container
+from mediatr import Mediator
+from rodi import Container, ServiceLifeStyle
 
 from src.application.authentication.commands.register.command import RegisterCommand
 from src.application.authentication.commands.register.handler import RegisterCommandHandler
 from src.application.authentication.queries.login.handler import LoginQueryHandler
 from src.application.common.behaviors.command_validator import (
-    AbstractValidator,
     RegisterCommandValidator,
+    Validator,
 )
-from src.application.common.behaviors.validation import ValidateRegisterCommandBehavior
+from src.application.common.behaviors.validation import ValidationBehavior
 from src.application.common.interfaces import (
     IDateTimeProvider,
     IJwtTokenGenerator,
@@ -28,17 +29,17 @@ def build_application_container() -> Container:
     container: Container = Container()
 
     container.add_instance(logging.getLogger(__name__), logging.Logger)
-    container.add_instance(setup_mediatr(container))
     container.add_instance(MapperImpl(Retort()), Mapper)
 
     container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
     container.add_singleton(IDateTimeProvider, DateTimeProvider)
+    container.add_singleton_by_factory(setup_mediatr, Mediator)
 
     container.add_scoped(IUserRepository, UserRepository)
-    # container.add_scoped(AbstractValidator[RegisterCommand], RegisterCommandValidator)
+    container.add_scoped(Validator[RegisterCommand], RegisterCommandValidator)
 
     container.register(RegisterCommandHandler)
     container.register(LoginQueryHandler)
-    # container.register(ValidateRegisterCommandBehavior)
+    # container.register(ValidationBehavior)
 
     return container

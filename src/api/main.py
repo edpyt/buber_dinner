@@ -1,4 +1,5 @@
 from blacksheep import Application
+from mediatr import Mediator
 
 from src.api.di import setup_api_di
 from src.api.docs.main import setup_docs
@@ -11,9 +12,8 @@ def build_api() -> Application:
     """Build BlackSheep application"""
 
     di_container = build_application_container()
-
     setup_api_di(di_container)
-
+    di_container.resolve(Mediator)
     app = Application(services=di_container, show_error_details=True)
     setup_app(app)
     return app
