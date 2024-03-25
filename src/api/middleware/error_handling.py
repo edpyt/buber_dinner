@@ -3,8 +3,13 @@ from typing import Awaitable, Callable
 
 from blacksheep import Request, Response
 
-from src.api.common.errors.problem_details import ProblemDetails, ProblemResponse
+from src.api.common.errors.problem_details import (
+    ProblemDetails,
+    ProblemResponse,
+    ValidationProblemDetails,
+)
 from src.application.common.errors.service_exception import IServiceException
+from src.application.common.errors.validation_behavior import ValidationBehaviorError
 
 
 class ErrorHandlingMiddleware:
@@ -29,5 +34,13 @@ class ErrorHandlingMiddleware:
             status_code = 500
             message = "Something went wrong with the request from the server"
 
-        problem_details = ProblemDetails(message=message, status=status_code)
+        if not isinstance(exception, ValidationBehaviorError):
+            problem_details = ProblemDetails(message=message, status=status_code)
+        else:
+            problem_details = ValidationProblemDetails(
+                message=message,
+                status=status_code,
+                errors=exception.errors,
+            )
+
         return ProblemResponse(problem_details=problem_details)

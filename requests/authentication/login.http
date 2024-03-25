@@ -1,11 +1,9 @@
 @host=http://localhost:8000
 
-POST {{host}}/auth/register
+POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-    "first_name": "Amichai",
-    "last_name": "Mantinband",
     "email": "amichai@mantinband.com",
     "password": "Amiko1232!"
 }

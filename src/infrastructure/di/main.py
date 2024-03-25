@@ -7,11 +7,16 @@ from rodi import Container
 from src.application.authentication.commands.register.command import RegisterCommand
 from src.application.authentication.commands.register.handler import RegisterCommandHandler
 from src.application.authentication.queries.login.handler import LoginQueryHandler
+from src.application.authentication.queries.login.query import LoginQuery
 from src.application.common.behaviors.command_validator import (
     RegisterCommandValidator,
     Validator,
 )
-from src.application.common.behaviors.validation import RegisterCommandValidationBehavior
+from src.application.common.behaviors.query_validator import LoginQueryValidator
+from src.application.common.behaviors.validation import (
+    LoginQueryValidationBehavior,
+    RegisterCommandValidationBehavior,
+)
 from src.application.common.interfaces import (
     IDateTimeProvider,
     IJwtTokenGenerator,
@@ -36,8 +41,12 @@ def build_application_container() -> Container:
     container.add_singleton_by_factory(setup_mediatr, Mediator)
 
     container.add_scoped(IUserRepository, UserRepository)
+
     container.add_scoped(Validator[RegisterCommand], RegisterCommandValidator)
     container.add_scoped(RegisterCommandValidationBehavior)
+
+    container.add_scoped(Validator[LoginQuery], LoginQueryValidator)
+    container.add_scoped(LoginQueryValidationBehavior)
 
     container.register(RegisterCommandHandler)
     container.register(LoginQueryHandler)

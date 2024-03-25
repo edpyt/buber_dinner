@@ -5,7 +5,10 @@ from rodi import CannotResolveTypeException, Container
 
 from src.application.authentication.commands.register.handler import RegisterCommandHandler
 from src.application.authentication.queries.login.handler import LoginQueryHandler
-from src.application.common.behaviors.validation import RegisterCommandValidationBehavior
+from src.application.common.behaviors.validation import (
+    LoginQueryValidationBehavior,
+    RegisterCommandValidationBehavior,
+)
 
 
 def handler_class_manager(cls: object, *args, container: Container) -> object:
@@ -31,3 +34,4 @@ def setup_handlers() -> None:
 
 def setup_behaviors() -> None:
     Mediator.register_behavior(RegisterCommandValidationBehavior)
+    Mediator.register_behavior(LoginQueryValidationBehavior)

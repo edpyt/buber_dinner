@@ -7,6 +7,10 @@ class ProblemDetails(BaseModel):
     status: int
 
 
+class ValidationProblemDetails(ProblemDetails):
+    errors: dict[str, list[str]]
+
+
 class ProblemResponse(Response):
     def __init__(self, problem_details: ProblemDetails) -> None:
         super().__init__(

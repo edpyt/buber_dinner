@@ -1,44 +1,31 @@
-from dataclasses import dataclass
-from typing import Protocol, TypeVar
+from collections import defaultdict
 
 from src.application.authentication.commands.register.command import RegisterCommand
-
-T = TypeVar("T")
-
-
-@dataclass
-class ValidationResult:
-    is_valid: bool
-    result: list[str]
-
-
-class Validator(Protocol[T]):
-    def validate(self, request: T) -> ValidationResult:
-        ...
+from src.application.common.behaviors.base import ValidationResult, Validator
 
 
 class RegisterCommandValidator(Validator[RegisterCommand]):
     def validate(self, request: RegisterCommand) -> ValidationResult:
-        errors = []
+        errors = defaultdict(list)
 
         try:
-            assert len(request.first_name) > 0, "first name input should be greater than zero"
+            assert len(request.first_name) > 0, "first name input must not be empty"
         except AssertionError as e:
-            errors.append(str(e))
+            errors["first_name"].append(str(e))
 
         try:
-            assert len(request.last_name) > 0, "last name input should be greater than zero"
+            assert len(request.last_name) > 0, "last name input must not be empty"
         except AssertionError as e:
-            errors.append(str(e))
+            errors["last_name"].append(str(e))
 
         try:
-            assert len(request.email) > 0, "email input should be greater than zero"
+            assert len(request.email) > 0, "email input must not be empty"
         except AssertionError as e:
-            errors.append(str(e))
+            errors["email"].append(str(e))
 
         try:
-            assert len(request.password) > 0, "password length should be greater than zero"
+            assert len(request.password) > 0, "password length must not be empty"
         except AssertionError as e:
-            errors.append(str(e))
+            errors["password"].append(str(e))
 
-        return ValidationResult(is_valid=not errors, result=errors)
+        return ValidationResult(is_valid=not errors, errors=errors)
