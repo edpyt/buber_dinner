@@ -13,7 +13,7 @@ class RegisterCommandHandler:
 
     async def handle(self, command: RegisterCommand) -> AuthenticationResult:
         if await self._user_repository.get_user_by_email(command.email):
-            raise DuplicateEmailError
+            raise DuplicateEmailError  # type: ignore
 
         user = User(
             first_name=command.first_name,

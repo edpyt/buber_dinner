@@ -2,7 +2,7 @@ from blacksheep import Application
 
 from src.api.di import setup_api_di
 from src.api.docs.main import setup_docs
-from src.api.middleware import ErrorHandlingMiddleware, setup_middlewares
+from src.api.middleware import ErrorHandlingMiddleware
 from src.infrastructure.di.main import build_application_container
 from src.infrastructure.log.main import configure_logging
 
@@ -23,4 +23,4 @@ def setup_app(app: Application) -> None:
     configure_logging()
 
     setup_docs(app)
-    setup_middlewares(app, ErrorHandlingMiddleware())
+    app.middlewares = [ErrorHandlingMiddleware()]

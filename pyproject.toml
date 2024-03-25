@@ -25,9 +25,17 @@ optional = true
 pytest = "^8.0.2"
 pytest-asyncio = "^0.23.5"
 
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+exclude = ["tests"]
+disable_error_code = ["import-not-found"]
 
 [tool.ruff]
 line-length = 99
@@ -54,6 +62,7 @@ ignore = [
    "S101",
    "PLR2004",
    "TCH001",
+   "PGH003",
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -22,7 +22,7 @@ class ErrorHandlingMiddleware:
         try:
             response: Response = await handler(request)
         except Exception as e:
-            response: Response = await self.handle_exception(e)
+            response = await self.handle_exception(e)
             logger.exception(e)  # noqa: TRY401
         return response
 

@@ -34,7 +34,7 @@ def build_application_container() -> Container:
     container: Container = Container()
 
     container.add_instance(logging.getLogger(__name__), logging.Logger)
-    container.add_instance(MapperImpl(Retort()), Mapper)
+    container.add_instance(MapperImpl(Retort()), Mapper)  # type: ignore
 
     container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
     container.add_singleton(IDateTimeProvider, DateTimeProvider)

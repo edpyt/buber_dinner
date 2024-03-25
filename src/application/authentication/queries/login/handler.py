@@ -15,9 +15,9 @@ class LoginQueryHandler:
         user = await self._user_repository.get_user_by_email(query.email)
 
         if not user:
-            raise UserDoesNotExistError
+            raise UserDoesNotExistError  # type: ignore
         if user.password != query.password:
-            raise InvalidPasswordError
+            raise InvalidPasswordError  # type: ignore
 
         token = self._jwt_token_generator.generate_token(user)
 

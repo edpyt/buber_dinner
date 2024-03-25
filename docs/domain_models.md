@@ -11,4 +11,3 @@
     "password": "testpass123"
 }
 ```
-

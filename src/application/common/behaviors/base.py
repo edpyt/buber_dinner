@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Protocol, TypeVar
 
-T = TypeVar("T")
+T = TypeVar("T", contravariant=True)  # noqa: PLC0105
 
 
 @dataclass
