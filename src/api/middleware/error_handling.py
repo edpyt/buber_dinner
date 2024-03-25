@@ -18,17 +18,16 @@ class ErrorHandlingMiddleware:
             response: Response = await handler(request)
         except Exception as e:
             response: Response = await self.handle_exception(e)
-            logger.exception(e)  # noqa: TRY401, TRY400, RUF100
+            logger.exception(e)  # noqa: TRY401
         return response
 
     async def handle_exception(self, exception: Exception) -> Response:
         if isinstance(exception, IServiceException):
             status_code = exception.status_code
+            message = str(exception)
         else:
             status_code = 500
+            message = "Something went wrong with the request from the server"
 
-        problem_details = ProblemDetails(
-            title=str(exception),
-            status=status_code,
-        )
+        problem_details = ProblemDetails(message=message, status=status_code)
         return ProblemResponse(problem_details=problem_details)

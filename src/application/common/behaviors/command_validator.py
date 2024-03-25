@@ -22,22 +22,22 @@ class RegisterCommandValidator(Validator[RegisterCommand]):
         errors = []
 
         try:
-            assert len(request.first_name) > 0, "First name should be greater than zero"
+            assert len(request.first_name) > 0, "first name input should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 
         try:
-            assert len(request.last_name) > 0, "Last name should be greater than zero"
+            assert len(request.last_name) > 0, "last name input should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 
         try:
-            assert len(request.email) > 0, "Email should be greater than zero"
+            assert len(request.email) > 0, "email input should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 
         try:
-            assert len(request.password) > 0, "Password should be greater than zero"
+            assert len(request.password) > 0, "password length should be greater than zero"
         except AssertionError as e:
             errors.append(str(e))
 

@@ -2,7 +2,7 @@ import logging
 
 from adaptix import Retort
 from mediatr import Mediator
-from rodi import Container, ServiceLifeStyle
+from rodi import Container
 
 from src.application.authentication.commands.register.command import RegisterCommand
 from src.application.authentication.commands.register.handler import RegisterCommandHandler
@@ -11,7 +11,7 @@ from src.application.common.behaviors.command_validator import (
     RegisterCommandValidator,
     Validator,
 )
-from src.application.common.behaviors.validation import ValidationBehavior
+from src.application.common.behaviors.validation import RegisterCommandValidationBehavior
 from src.application.common.interfaces import (
     IDateTimeProvider,
     IJwtTokenGenerator,
@@ -37,9 +37,9 @@ def build_application_container() -> Container:
 
     container.add_scoped(IUserRepository, UserRepository)
     container.add_scoped(Validator[RegisterCommand], RegisterCommandValidator)
+    container.add_scoped(RegisterCommandValidationBehavior)
 
     container.register(RegisterCommandHandler)
     container.register(LoginQueryHandler)
-    # container.register(ValidationBehavior)
 
     return container

@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class ProblemDetails(BaseModel):
-    title: str
+    message: str
     status: int
 
 
