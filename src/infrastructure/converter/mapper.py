@@ -1,4 +1,4 @@
-from typing import Any, Self
+from typing import Any
 
 from adaptix import Retort
 from adaptix.conversion import get_converter
@@ -15,18 +15,14 @@ from src.contracts.authentication.register_request import RegisterRequest
 class MapperImpl(Mapper):
     def __init__(self, retort: Retort) -> None:
         self._retort = retort
-
-    def __new__(cls) -> Self:
-        cls.convert_register_request_to_command = get_converter(  # type: ignore
+        self.convert_register_request_to_command = get_converter(  # type: ignore
             RegisterRequest,
             RegisterCommand,
         )
-        cls.convert_login_request_to_query = get_converter(  # type: ignore
+        self.convert_login_request_to_query = get_converter(  # type: ignore
             LoginRequest,
             LoginQuery,
         )
-
-        return super().__new__(cls)
 
     def convert_auth_result_to_response(self, src: AuthenticationResult) -> AuthenticationResponse:
         auth_result_data = self._convert_to_flatten_dict(self._retort.dump(src))

@@ -1,6 +1,5 @@
 from blacksheep import Response
 from blacksheep.server.controllers import APIController, post
-from blacksheep.server.responses import ok
 from mediatr import Mediator
 
 from src.application.authentication.commands.register.command import RegisterCommand
@@ -26,11 +25,11 @@ class AuthenticationController(APIController):
         command: RegisterCommand = self.mapper.convert_register_request_to_command(auth_request)
         auth_result = await self.mediator.send_async(command)
         response = self.mapper.convert_auth_result_to_response(auth_result)
-        return ok(response)
+        return self.ok(response)
 
     @post("login")
     async def login(self, auth_request: LoginRequest) -> Response:
         query: LoginQuery = self.mapper.convert_login_request_to_query(auth_request)
         auth_result = await self.mediator.send_async(query)
         response = self.mapper.convert_auth_result_to_response(auth_result)
-        return ok(response)
+        return self.ok(response)

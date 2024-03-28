@@ -1,5 +1,6 @@
 from blacksheep import Application
 
+from src.api.auth.handler import BuberDinnerAuthHandler
 from src.api.di import setup_api_di
 from src.api.docs.main import setup_docs
 from src.api.middleware import ErrorHandlingMiddleware
@@ -24,3 +25,6 @@ def setup_app(app: Application) -> None:
 
     setup_docs(app)
     app.middlewares = [ErrorHandlingMiddleware()]
+
+    app.use_authentication().add(BuberDinnerAuthHandler())
+    app.use_authorization()
