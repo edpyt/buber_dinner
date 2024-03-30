@@ -4,7 +4,8 @@
 
 ```python
 class Menu:
-    def create(self) -> None: ...
+    @classmethod
+    def create(cls) -> Menu: ...
 
     def add_dinner(dinner: Dinner) -> None: ...
 

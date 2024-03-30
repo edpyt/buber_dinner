@@ -14,4 +14,8 @@ class MenuSection(Entity[MenuSectionId]):
 
     @classmethod
     def create(cls, name: str, description: str) -> Self:
-        return cls(MenuSectionId.create_unique(), name, description)  # type: ignore[arg-type]
+        return cls(
+            id=MenuSectionId.create_unique(),
+            name=name,
+            description=description,
+        )
