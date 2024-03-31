@@ -6,7 +6,7 @@ from src.domain.common.models.value_object import ValueObject
 
 
 @dataclass(frozen=True)
-class DinnerId(ValueObject[UUID]):
+class ReservationId(ValueObject[UUID]):
     value: UUID
 
     @classmethod

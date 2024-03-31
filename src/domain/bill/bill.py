@@ -14,8 +14,8 @@ class Bill(AggregateRoot[BillId]):
     guest_id: GuestId
     host_id: HostId
     price: Price
-    created_date_time: datetime = field(default_factory=datetime.now)
-    updated_date_time: datetime = field(default_factory=datetime.now)
+    created_date_time: datetime = field(default_factory=datetime.utcnow)
+    updated_date_time: datetime = field(default_factory=datetime.utcnow)
 
     @classmethod
     def create(cls, guest_id: GuestId, host_id: HostId, price: Price) -> Self:

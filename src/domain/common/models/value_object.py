@@ -6,11 +6,14 @@ T = TypeVar("T")
 
 
 @dataclass(frozen=True)
-class ValueObject(ABC, Generic[T]):
-    value: T
-
+class BaseValueObject(ABC):  # noqa: B024
     def __post_init__(self) -> None:
         self._validate()
 
-    def _validate(self) -> None:
+    def _validate(self) -> None:  # noqa: B027
         ...
+
+
+@dataclass(frozen=True)
+class ValueObject(BaseValueObject, ABC, Generic[T]):
+    value: T

@@ -18,9 +18,9 @@ class Menu(AggregateRoot[MenuId]):
     average_rating: AverageRating
     host_id: HostId
 
-    sections: list[MenuSection] = field(default_factory=list)
-    dinner_ids: list[DinnerId] = field(default_factory=list)
-    menu_review_ids: list[MenuReviewId] = field(default_factory=list)
+    _sections: list[MenuSection] = field(default_factory=list)
+    _dinner_ids: list[DinnerId] = field(default_factory=list)
+    _menu_review_ids: list[MenuReviewId] = field(default_factory=list)
 
     created_date_time: datetime = field(default_factory=datetime.now)
     updated_date_time: datetime = field(default_factory=datetime.now)
@@ -34,3 +34,15 @@ class Menu(AggregateRoot[MenuId]):
             average_rating=AverageRating.create_new(),
             host_id=host_id,
         )
+
+    @property
+    def sections(self) -> tuple[MenuSection, ...]:
+        return tuple(self._sections)
+
+    @property
+    def dinner_ids(self) -> tuple[DinnerId, ...]:
+        return tuple(self._dinner_ids)
+
+    @property
+    def menu_review_ids(self) -> tuple[MenuReviewId, ...]:
+        return tuple(self._menu_review_ids)
