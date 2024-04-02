@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Protocol, Sequence
+from typing import Any, Sequence
 
 from blacksheep import Application
 
@@ -7,7 +7,7 @@ from blacksheep import Application
 @dataclass
 class DIOverride:
     value: Any
-    type_: Protocol | None = None
+    type_: type | None = None
 
 
 def setup_test_di(app: Application, *di_overrides: Sequence[DIOverride]) -> None:
