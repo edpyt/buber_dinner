@@ -3,7 +3,7 @@ from typing import Protocol
 from src.application.dto.user import UserDTO
 
 
-class IUserRepository(Protocol):
+class UserRepository(Protocol):
     async def add(self, user: UserDTO) -> None:
         ...
 

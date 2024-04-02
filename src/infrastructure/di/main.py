@@ -1,6 +1,5 @@
 import logging
 
-from adaptix import Retort
 from mediatr import Mediator
 from rodi import Container
 
@@ -18,32 +17,32 @@ from src.application.common.behaviors.validation import (
     RegisterCommandValidationBehavior,
 )
 from src.application.common.interfaces import (
-    IDateTimeProvider,
-    IJwtTokenGenerator,
+    DateTimeProvider,
+    JwtTokenGenerator,
 )
 from src.application.common.mapper.interface import Mapper
-from src.application.persistence.user_repo import IUserRepository
-from src.infrastructure.authentication import JwtTokenGenerator
+from src.application.persistence.user_repo import UserRepository
+from src.infrastructure.authentication import JwtTokenGeneratorImpl
 from src.infrastructure.converter.mapper import MapperImpl
 from src.infrastructure.converter.retort import setup_retort
 from src.infrastructure.mediator.main import setup_mediatr
-from src.infrastructure.persistence.user_repo import UserRepository
-from src.infrastructure.services.dt_provider import DateTimeProvider
+from src.infrastructure.persistence.user_repo import UserRepositoryImpl
+from src.infrastructure.services.dt_provider import DateTimeProviderImpl
 
 
 def build_application_container() -> Container:
     container: Container = Container()
 
     container.add_instance(logging.getLogger(__name__), logging.Logger)
-    container.add_instance(setup_retort(), Retort)
+    container.add_instance(setup_retort())
 
     container.add_singleton(Mapper, MapperImpl)
-    container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
-    container.add_singleton(IDateTimeProvider, DateTimeProvider)
+    container.add_singleton(JwtTokenGenerator, JwtTokenGeneratorImpl)
+    container.add_singleton(DateTimeProvider, DateTimeProviderImpl)
 
     container.add_singleton_by_factory(setup_mediatr, Mediator)
 
-    container.add_scoped(IUserRepository, UserRepository)
+    container.add_scoped(UserRepository, UserRepositoryImpl)
 
     # Register mediatr command
     container.add_scoped(Validator[RegisterCommand], RegisterCommandValidator)

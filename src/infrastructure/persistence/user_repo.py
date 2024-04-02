@@ -1,10 +1,10 @@
 from typing import ClassVar
 
 from src.application.dto.user import UserDTO
-from src.application.persistence.user_repo import IUserRepository
+from src.application.persistence.user_repo import UserRepository
 
 
-class UserRepository(IUserRepository):
+class UserRepositoryImpl(UserRepository):
     users: ClassVar[list[UserDTO]] = []
 
     async def add(self, user: UserDTO) -> None:

@@ -2,13 +2,13 @@ from datetime import timedelta
 
 import jwt
 
-from src.application.common.interfaces import IDateTimeProvider, IJwtTokenGenerator
+from src.application.common.interfaces import DateTimeProvider, JwtTokenGenerator
 from src.application.dto.user import UserDTO
 from src.infrastructure.config.jwt import JWTConfig
 
 
-class JwtTokenGenerator(IJwtTokenGenerator):
-    _dt_provider: IDateTimeProvider
+class JwtTokenGeneratorImpl(JwtTokenGenerator):
+    _dt_provider: DateTimeProvider
     _jwt_config: JWTConfig
 
     def generate_token(self, user: UserDTO) -> str:

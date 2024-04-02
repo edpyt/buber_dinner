@@ -1,3 +1,3 @@
-from .jwt_token_generator import JwtTokenGenerator
+from .jwt_token_generator import JwtTokenGeneratorImpl
 
-__all__ = ("JwtTokenGenerator",)
+__all__ = ("JwtTokenGeneratorImpl",)

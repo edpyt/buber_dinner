@@ -1,4 +1,4 @@
-from .authentication import IJwtTokenGenerator
-from .services.dt_provider import IDateTimeProvider
+from .authentication import JwtTokenGenerator
+from .services.dt_provider import DateTimeProvider
 
-__all__ = ("IJwtTokenGenerator", "IDateTimeProvider")
+__all__ = ("JwtTokenGenerator", "DateTimeProvider")

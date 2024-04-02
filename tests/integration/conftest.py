@@ -5,9 +5,9 @@ from blacksheep import Application
 from blacksheep.testing import TestClient
 from src.api import build_api
 from src.application.dto.user import UserDTO
-from src.application.persistence.user_repo import IUserRepository
+from src.application.persistence.user_repo import UserRepository
 from src.infrastructure.config.jwt import JWTConfig
-from src.infrastructure.persistence.user_repo import UserRepository
+from src.infrastructure.persistence.user_repo import UserRepositoryImpl
 
 from tests.integration.di import DIOverride, setup_test_di
 
@@ -25,8 +25,8 @@ def create_app(jwt_config: JWTConfig) -> Application:
 
 
 @pytest.fixture(name="user_repo")
-async def create_user_repository() -> AsyncGenerator[IUserRepository, None]:
-    user_repo = UserRepository()
+async def create_user_repository() -> AsyncGenerator[UserRepository, None]:
+    user_repo = UserRepositoryImpl()
     yield user_repo
     user_repo.users.clear()
 
@@ -34,9 +34,9 @@ async def create_user_repository() -> AsyncGenerator[IUserRepository, None]:
 @pytest.fixture
 async def test_client(
     app: Application,
-    user_repo: IUserRepository,
+    user_repo: UserRepository,
 ) -> AsyncGenerator[TestClient, None]:
-    setup_test_di(app, DIOverride(user_repo, IUserRepository))
+    setup_test_di(app, DIOverride(user_repo, UserRepository))
     await app.start()
     client: TestClient = TestClient(app)
     return client
