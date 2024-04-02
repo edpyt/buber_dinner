@@ -3,7 +3,7 @@ from datetime import timedelta
 import jwt
 
 from src.application.common.interfaces import IDateTimeProvider, IJwtTokenGenerator
-from src.domain.users.user import User
+from src.application.dto.user import UserDTO
 from src.infrastructure.config.jwt import JWTConfig
 
 
@@ -11,7 +11,7 @@ class JwtTokenGenerator(IJwtTokenGenerator):
     _dt_provider: IDateTimeProvider
     _jwt_config: JWTConfig
 
-    def generate_token(self, user: User) -> str:
+    def generate_token(self, user: UserDTO) -> str:
         encoded_jwt: str = jwt.encode(
             {
                 "sub": str(user.id),

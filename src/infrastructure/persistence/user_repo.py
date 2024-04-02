@@ -1,16 +1,16 @@
 from typing import ClassVar
 
+from src.application.dto.user import UserDTO
 from src.application.persistence.user_repo import IUserRepository
-from src.domain.users.user import User
 
 
 class UserRepository(IUserRepository):
-    users: ClassVar[list[User]] = []
+    users: ClassVar[list[UserDTO]] = []
 
-    async def add(self, user: User) -> None:
+    async def add(self, user: UserDTO) -> None:
         self.users.append(user)
 
-    async def get_user_by_email(self, email: str) -> User | None:
+    async def get_user_by_email(self, email: str) -> UserDTO | None:
         filtered_users = filter(lambda user: user.email == email, self.users)
 
         try:

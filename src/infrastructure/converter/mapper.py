@@ -15,6 +15,7 @@ from src.contracts.authentication.register_request import RegisterRequest
 class MapperImpl(Mapper):
     def __init__(self, retort: Retort) -> None:
         self._retort = retort
+
         self.convert_register_request_to_command = get_converter(  # type: ignore
             RegisterRequest,
             RegisterCommand,

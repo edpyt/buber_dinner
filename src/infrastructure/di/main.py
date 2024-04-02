@@ -25,6 +25,7 @@ from src.application.common.mapper.interface import Mapper
 from src.application.persistence.user_repo import IUserRepository
 from src.infrastructure.authentication import JwtTokenGenerator
 from src.infrastructure.converter.mapper import MapperImpl
+from src.infrastructure.converter.retort import setup_retort
 from src.infrastructure.mediator.main import setup_mediatr
 from src.infrastructure.persistence.user_repo import UserRepository
 from src.infrastructure.services.dt_provider import DateTimeProvider
@@ -34,21 +35,23 @@ def build_application_container() -> Container:
     container: Container = Container()
 
     container.add_instance(logging.getLogger(__name__), logging.Logger)
-    container.add_instance(MapperImpl(Retort()), Mapper)  # type: ignore
+    container.add_instance(setup_retort(), Retort)
 
+    container.add_singleton(Mapper, MapperImpl)
     container.add_singleton(IJwtTokenGenerator, JwtTokenGenerator)
     container.add_singleton(IDateTimeProvider, DateTimeProvider)
+
     container.add_singleton_by_factory(setup_mediatr, Mediator)
 
     container.add_scoped(IUserRepository, UserRepository)
 
+    # Register mediatr command
     container.add_scoped(Validator[RegisterCommand], RegisterCommandValidator)
     container.add_scoped(RegisterCommandValidationBehavior)
-
+    container.register(RegisterCommandHandler)
+    # Login mediatr query
     container.add_scoped(Validator[LoginQuery], LoginQueryValidator)
     container.add_scoped(LoginQueryValidationBehavior)
-
-    container.register(RegisterCommandHandler)
     container.register(LoginQueryHandler)
 
     return container

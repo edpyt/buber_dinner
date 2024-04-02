@@ -11,7 +11,7 @@ from src.application.common.behaviors.validation import (
 )
 
 
-def handler_class_manager(cls: type, *args, container: Container) -> object:
+def handler_class_manager(cls: type, *_, container: Container) -> object:
     try:
         return container.get(cls)
     except CannotResolveTypeException:

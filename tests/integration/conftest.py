@@ -4,8 +4,8 @@ import pytest
 from blacksheep import Application
 from blacksheep.testing import TestClient
 from src.api import build_api
+from src.application.dto.user import UserDTO
 from src.application.persistence.user_repo import IUserRepository
-from src.domain.users.user import User
 from src.infrastructure.config.jwt import JWTConfig
 from src.infrastructure.persistence.user_repo import UserRepository
 
@@ -45,11 +45,11 @@ async def test_client(
 @pytest.fixture
 def create_user_factory(
     user_repo: UserRepository,
-) -> Callable[[str, str, str, str], Coroutine[User, None, None]]:
-    async def create_user(first_name: str, last_name: str, email: str, password: str) -> User:
+) -> Callable[[str, str, str, str], Coroutine[UserDTO, None, None]]:
+    async def create_user(first_name: str, last_name: str, email: str, password: str) -> UserDTO:
         nonlocal user_repo
 
-        user = User.create(
+        user = UserDTO.create(
             first_name=first_name,
             last_name=last_name,
             email=email,

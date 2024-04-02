@@ -7,6 +7,6 @@ from .entity import Entity, TId
 
 @dataclass
 class AggregateRoot(Entity, ABC, Generic[TId]):
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def create(cls, *args, **kwargs) -> Self: ...

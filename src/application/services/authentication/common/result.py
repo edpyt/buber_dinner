@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from src.domain.users.user import User
+from src.application.dto.user import UserDTO
 
 
 @dataclass
 class AuthenticationResult:
-    user: User
+    user: UserDTO
     token: str

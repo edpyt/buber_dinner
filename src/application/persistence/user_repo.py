@@ -1,11 +1,11 @@
 from typing import Protocol
 
-from src.domain.users.user import User
+from src.application.dto.user import UserDTO
 
 
 class IUserRepository(Protocol):
-    async def add(self, user: User) -> None:
+    async def add(self, user: UserDTO) -> None:
         ...
 
-    async def get_user_by_email(self, email: str) -> User | None:
+    async def get_user_by_email(self, email: str) -> UserDTO | None:
         ...
