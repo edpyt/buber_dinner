@@ -1,7 +1,7 @@
 from typing import ClassVar
 
 from src.application.persistence.user_repo import IUserRepository
-from src.domain.entities.user import User
+from src.domain.users.user import User
 
 
 class UserRepository(IUserRepository):

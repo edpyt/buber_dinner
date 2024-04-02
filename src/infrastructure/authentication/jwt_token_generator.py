@@ -3,7 +3,7 @@ from datetime import timedelta
 import jwt
 
 from src.application.common.interfaces import IDateTimeProvider, IJwtTokenGenerator
-from src.domain.entities.user import User
+from src.domain.users.user import User
 from src.infrastructure.config.jwt import JWTConfig
 
 

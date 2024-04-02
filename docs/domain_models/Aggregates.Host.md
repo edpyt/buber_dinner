@@ -3,7 +3,19 @@
 ## Host
 
 ```python
+class Host:
+    first_name: str
+    last_name: str
+    profile_image: str
 
+    average_rating: AverageRating
+    user_id: UserId
+
+    _menu_ids: list[MenuId]
+    _dinner_ids: list[DinnerId]
+
+    created_date_time: datetime
+    updated_date_time: datetime
 ```
 
 ```json

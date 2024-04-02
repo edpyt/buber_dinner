@@ -2,7 +2,7 @@ from typing import Callable, Coroutine
 
 from blacksheep import JSONContent
 from blacksheep.testing import TestClient
-from src.domain.entities.user import User
+from src.domain.users.user import User
 
 
 async def test_login_user(

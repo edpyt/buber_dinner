@@ -2,7 +2,7 @@ from src.application.common.errors import DuplicateEmailError
 from src.application.common.interfaces import IJwtTokenGenerator
 from src.application.persistence.user_repo import IUserRepository
 from src.application.services.authentication import AuthenticationResult
-from src.domain.entities.user import User
+from src.domain.users.user import User
 
 from .command import RegisterCommand
 
@@ -15,7 +15,7 @@ class RegisterCommandHandler:
         if await self._user_repository.get_user_by_email(command.email):
             raise DuplicateEmailError  # type: ignore
 
-        user = User(
+        user = User.create(
             first_name=command.first_name,
             last_name=command.last_name,
             email=command.email,

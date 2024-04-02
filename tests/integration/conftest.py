@@ -5,7 +5,7 @@ from blacksheep import Application
 from blacksheep.testing import TestClient
 from src.api import build_api
 from src.application.persistence.user_repo import IUserRepository
-from src.domain.entities.user import User
+from src.domain.users.user import User
 from src.infrastructure.config.jwt import JWTConfig
 from src.infrastructure.persistence.user_repo import UserRepository
 
@@ -49,7 +49,12 @@ def create_user_factory(
     async def create_user(first_name: str, last_name: str, email: str, password: str) -> User:
         nonlocal user_repo
 
-        user = User(first_name=first_name, last_name=last_name, email=email, password=password)
+        user = User.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=password,
+        )
         await user_repo.add(user)
 
     return create_user

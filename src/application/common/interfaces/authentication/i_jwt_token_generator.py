@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from src.domain.entities.user import User
+from src.domain.users.user import User
 
 
 class IJwtTokenGenerator(Protocol):
