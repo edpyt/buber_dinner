@@ -9,6 +9,7 @@ from src.application.common.behaviors.validation import (
     LoginQueryValidationBehavior,
     RegisterCommandValidationBehavior,
 )
+from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
 
 
 def handler_class_manager(cls: type, *_, container: Container) -> object:
@@ -30,6 +31,8 @@ def setup_mediatr(container: Container) -> Mediator:
 def setup_handlers() -> None:
     Mediator.register_handler(RegisterCommandHandler)
     Mediator.register_handler(LoginQueryHandler)
+
+    Mediator.register_handler(CreateMenuCommandHandler)
 
 
 def setup_behaviors() -> None:

@@ -14,4 +14,6 @@ class DinnerController(APIController):
     @auth()
     @get("/")
     def list_dinners(self) -> list[str]:
+        """Gets a list of dinners"""
+
         return self.ok([])
