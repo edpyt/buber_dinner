@@ -1,7 +1,7 @@
 from typing import AsyncGenerator, Callable, Coroutine
 
 import pytest
-from blacksheep import Application
+from blacksheep import Application, JSONContent
 from blacksheep.testing import TestClient
 from src.api import build_api
 from src.application.dto.user import UserDTO
@@ -18,10 +18,12 @@ def jwt_config() -> JWTConfig:
 
 
 @pytest.fixture(name="app", scope="session")
-def create_app(jwt_config: JWTConfig) -> Application:
+async def create_app(jwt_config: JWTConfig) -> AsyncGenerator[Application, None]:
     app: Application = build_api()
     setup_test_di(app, DIOverride(jwt_config))
-    return app
+    await app.start()
+    yield app
+    await app.stop()
 
 
 @pytest.fixture(name="user_repo")
@@ -32,14 +34,29 @@ async def create_user_repository() -> AsyncGenerator[UserRepository, None]:
 
 
 @pytest.fixture
-async def test_client(
+def test_client(
     app: Application,
     user_repo: UserRepository,
-) -> AsyncGenerator[TestClient, None]:
+) -> TestClient:
     setup_test_di(app, DIOverride(user_repo, UserRepository))
-    await app.start()
     client: TestClient = TestClient(app)
     return client
+
+
+@pytest.fixture(name="token")
+async def create_auth_token(test_client: TestClient) -> str:
+    auth_response = await test_client.post(
+        "/auth/register",
+        content=JSONContent(
+            {
+                "first_name": "Amichai",
+                "last_name": "Mantinband",
+                "email": "amichai@mantinband.com",
+                "password": "Amiko1232!",
+            },
+        ),
+    )
+    return (await auth_response.json())["token"]
 
 
 @pytest.fixture
