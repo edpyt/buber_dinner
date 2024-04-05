@@ -22,11 +22,11 @@ class MapperImpl(Mapper):
     def __init__(self, retort: Retort) -> None:
         self._retort = retort
 
-        self.convert_register_request_to_command = get_converter(  # type: ignore
+        self.convert_register_request_to_command = get_converter(  # type: ignore[method-assign]
             RegisterRequest,
             RegisterCommand,
         )
-        self.convert_login_request_to_query = get_converter(  # type: ignore
+        self.convert_login_request_to_query = get_converter(  # type: ignore[method-assign]
             LoginRequest,
             LoginQuery,
         )
@@ -43,7 +43,7 @@ class MapperImpl(Mapper):
                 ),
             ],
         )
-        self.convert_create_menu_request_to_command = get_converter(
+        self.convert_create_menu_request_to_command = get_converter(  # type: ignore[method-assign]
             CreateMenuRequest,
             CreateMenuCommand,
             recipe=[
