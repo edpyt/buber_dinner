@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from adaptix import Retort
 from blacksheep import FromJSON, Response, ok
 from blacksheep.server.controllers import APIController, post
 
@@ -8,6 +9,9 @@ from src.contracts.menu.create_menu_request import CreateMenuRequest
 
 
 class MenusController(APIController):
+    _mapper: Mapper
+    _retort: Retort
+
     @classmethod
     def route(cls) -> str | None:
         return "hosts/{host_id}/menus"
@@ -16,8 +20,7 @@ class MenusController(APIController):
     async def create_menu(
         self,
         host_id: UUID,
-        create_menu_request: FromJSON[CreateMenuRequest],
-        mapper: Mapper,
+        create_menu_request: FromJSON,
     ) -> Response:
         """
         Create menu request.
@@ -26,4 +29,9 @@ class MenusController(APIController):
         :param input: CreateMenuRequest contract
         """
 
-        return ok(create_menu_request.value)
+        create_menu_request = self._retort.load(
+            create_menu_request.value,
+            CreateMenuRequest,
+        )
+        command = self._mapper.convert_create_menu_request_to_command(create_menu_request)
+        return ok(command)
