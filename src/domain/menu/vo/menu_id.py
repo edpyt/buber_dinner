@@ -12,3 +12,6 @@ class MenuId(ValueObject[UUID]):
     @classmethod
     def create_unique(cls) -> Self:
         return cls(value=uuid4())
+
+    def __repr__(self) -> str:
+        return str(self.value)

@@ -12,3 +12,7 @@ class HostId(ValueObject[UUID]):
     @classmethod
     def create_unique(cls) -> Self:
         return cls(value=uuid4())
+
+    @classmethod
+    def create(cls, value: UUID) -> Self:
+        return cls(value=value)

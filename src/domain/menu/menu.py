@@ -26,13 +26,22 @@ class Menu(AggregateRoot[MenuId]):
     updated_date_time: datetime = field(default_factory=datetime.now)
 
     @classmethod
-    def create(cls, name: str, description: str, host_id: HostId) -> Self:
+    def create(
+        cls,
+        name: str,
+        description: str,
+        host_id: HostId,
+        sections: list[MenuSection] | None = None,
+    ) -> Self:
+        if sections is None:
+            sections = []
         return cls(
             id=MenuId.create_unique(),
             name=name,
             description=description,
             average_rating=AverageRating.create_new(),
             host_id=host_id,
+            _sections=sections,
         )
 
     @property

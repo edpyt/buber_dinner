@@ -13,9 +13,12 @@ class MenuSection(Entity[MenuSectionId]):
     items: list[MenuItem] = field(default_factory=list)
 
     @classmethod
-    def create(cls, name: str, description: str) -> Self:
+    def create(cls, name: str, description: str, items: list | None = None) -> Self:
+        if items is None:
+            items = []
         return cls(
             id=MenuSectionId.create_unique(),
             name=name,
             description=description,
+            items=items,
         )

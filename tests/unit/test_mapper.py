@@ -25,6 +25,7 @@ def test_convert_auth_result_to_response(mapper: Mapper) -> None:
 
 def test_convert_menu_request_to_command(mapper: Mapper, retort: Retort) -> None:
     menu_request = CreateMenuRequest(
+        uuid4(),
         "test",
         "test",
         [MenuSection("test", "test", [MenuItem("test", "test")])],

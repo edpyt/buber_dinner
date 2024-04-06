@@ -10,6 +10,8 @@ from src.contracts.authentication.authentication_response import AuthenticationR
 from src.contracts.authentication.login_request import LoginRequest
 from src.contracts.authentication.register_request import RegisterRequest
 from src.contracts.menu.create_menu_request import CreateMenuRequest
+from src.contracts.menu.menu_response import MenuResponse
+from src.domain.menu.menu import Menu
 
 
 # TODO: refactor, separate mappers
@@ -25,3 +27,4 @@ class Mapper(Protocol):
         self,
         src: CreateMenuRequest,
     ) -> CreateMenuCommand: ...
+    def convert_menu_result_to_response(self, src: Menu) -> MenuResponse: ...

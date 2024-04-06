@@ -8,10 +8,10 @@ class MenuResponse:
     name: str
     description: str
     average_rating: float
-    sections: list["MenuSectionResponse"]
+    sections: tuple["MenuSectionResponse", ...]
     host_id: str
-    dinner_ids: list[str]
-    menu_review_ids: list[str]
+    dinner_ids: tuple[str, ...]
+    menu_review_ids: tuple[str, ...]
     created_date_time: datetime
     updated_date_time: datetime
 
@@ -21,7 +21,7 @@ class MenuSectionResponse:
     id: str
     name: str
     description: str
-    items: list["MenuItemResponse"]
+    items: tuple["MenuItemResponse", ...]
 
 
 @dataclass
