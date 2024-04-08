@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Protocol
 
 from src.application.authentication.commands.register.command import RegisterCommand
@@ -16,7 +15,6 @@ from src.domain.menu.menu import Menu
 class Mapper(Protocol): ...
 
 
-@dataclass
 class MainMapper(Mapper, Protocol):
     auth: "AuthMapper"
     menu: "MenuMapper"
