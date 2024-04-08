@@ -10,34 +10,34 @@ from src.contracts.menu.create_menu_request import CreateMenuRequest, MenuItem, 
 from src.contracts.menu.menu_response import MenuItemResponse, MenuResponse, MenuSectionResponse
 from src.domain.menu.menu import Menu
 
+_convert_menu_item_to_command = get_converter(MenuItem, MenuItemCommand)
+_convert_menu_section_to_command = get_converter(
+    MenuSection,
+    MenuSectionCommand,
+    recipe=[
+        coercer(
+            list[MenuItem],
+            list[MenuItemCommand],
+            lambda menu_items: list(map(_convert_menu_item_to_command, menu_items)),
+        ),
+    ],
+)
+
 
 class MenuMapperImpl(MenuMapper):
-    def __init__(self) -> None:
-        convert_menu_item_to_command = get_converter(MenuItem, MenuItemCommand)
-        convert_menu_section_to_command = get_converter(
-            MenuSection,
-            MenuSectionCommand,
-            recipe=[
-                coercer(
-                    list[MenuItem],
-                    list[MenuItemCommand],
-                    lambda menu_items: list(map(convert_menu_item_to_command, menu_items)),
+    convert_create_menu_request_to_command = get_converter(
+        CreateMenuRequest,
+        CreateMenuCommand,
+        recipe=[
+            coercer(
+                list[MenuSection],
+                list[MenuSectionCommand],
+                lambda menu_sections: list(
+                    map(_convert_menu_section_to_command, menu_sections),
                 ),
-            ],
-        )
-        self.convert_create_menu_request_to_command = get_converter(  # type: ignore[method-assign]
-            CreateMenuRequest,
-            CreateMenuCommand,
-            recipe=[
-                coercer(
-                    list[MenuSection],
-                    list[MenuSectionCommand],
-                    lambda menu_sections: list(
-                        map(convert_menu_section_to_command, menu_sections),
-                    ),
-                ),
-            ],
-        )
+            ),
+        ],
+    )
 
     def convert_menu_result_to_response(self, src: Menu) -> MenuResponse:
         return MenuResponse(
