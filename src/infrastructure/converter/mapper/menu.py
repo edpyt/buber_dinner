@@ -10,15 +10,15 @@ from src.contracts.menu.create_menu_request import CreateMenuRequest, MenuItem, 
 from src.contracts.menu.menu_response import MenuItemResponse, MenuResponse, MenuSectionResponse
 from src.domain.menu.menu import Menu
 
-_convert_menu_item_to_command = get_converter(MenuItem, MenuItemCommand)
-_convert_menu_section_to_command = get_converter(
+__convert_menu_item_to_command = get_converter(MenuItem, MenuItemCommand)
+__convert_menu_section_to_command = get_converter(
     MenuSection,
     MenuSectionCommand,
     recipe=[
         coercer(
             list[MenuItem],
             list[MenuItemCommand],
-            lambda menu_items: list(map(_convert_menu_item_to_command, menu_items)),
+            lambda menu_items: list(map(__convert_menu_item_to_command, menu_items)),
         ),
     ],
 )
@@ -33,7 +33,7 @@ class MenuMapperImpl(MenuMapper):
                 list[MenuSection],
                 list[MenuSectionCommand],
                 lambda menu_sections: list(
-                    map(_convert_menu_section_to_command, menu_sections),
+                    map(__convert_menu_section_to_command, menu_sections),
                 ),
             ),
         ],
