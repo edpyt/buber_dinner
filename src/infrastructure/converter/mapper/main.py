@@ -1,6 +1,4 @@
-from src.application.common.mapper.interface import AuthMapper, Mapper, MenuMapper
+from src.application.common.mapper.interface import MainMapper
 
 
-class MainMapperImpl(Mapper):
-    auth: AuthMapper
-    menu: MenuMapper
+class MainMapperImpl(MainMapper): ...

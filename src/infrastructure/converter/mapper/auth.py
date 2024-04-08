@@ -13,14 +13,17 @@ from src.contracts.authentication.register_request import RegisterRequest
 
 
 class AuthMapperImpl(AuthMapper):
-    convert_register_request_to_command = get_converter(
-        RegisterRequest,
-        RegisterCommand,
-    )
-    convert_login_request_to_query = get_converter(
-        LoginRequest,
-        LoginQuery,
-    )
+    def __init__(self) -> None:
+        self.convert_register_request_to_command = get_converter(  # type: ignore [method-assign]
+            RegisterRequest,
+            RegisterCommand,
+        )
+        self.convert_login_request_to_query = get_converter(  # type: ignore [method-assign]
+            LoginRequest,
+            LoginQuery,
+        )
+
+        super().__init__()
 
     def convert_auth_result_to_response(
         self,

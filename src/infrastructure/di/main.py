@@ -20,7 +20,7 @@ from src.application.common.interfaces import (
     DateTimeProvider,
     JwtTokenGenerator,
 )
-from src.application.common.mapper.interface import AuthMapper, Mapper, MenuMapper
+from src.application.common.mapper.interface import AuthMapper, MainMapper, MenuMapper
 from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
 from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository
@@ -41,7 +41,7 @@ def build_application_container() -> Container:
     container.add_instance(logging.getLogger(__name__), logging.Logger)
     container.add_instance(setup_retort())
 
-    container.add_singleton(Mapper, MainMapperImpl)
+    container.add_singleton(MainMapper, MainMapperImpl)
     container.add_singleton(AuthMapper, AuthMapperImpl)
     container.add_singleton(MenuMapper, MenuMapperImpl)
 
