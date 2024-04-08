@@ -1,38 +1,13 @@
 import logging
 
-from mediatr import Mediator
 from rodi import Container
 
-from src.application.authentication.commands.register.command import RegisterCommand
-from src.application.authentication.commands.register.handler import RegisterCommandHandler
-from src.application.authentication.queries.login.handler import LoginQueryHandler
-from src.application.authentication.queries.login.query import LoginQuery
-from src.application.common.behaviors.command_validator import (
-    RegisterCommandValidator,
-    Validator,
-)
-from src.application.common.behaviors.query_validator import LoginQueryValidator
-from src.application.common.behaviors.validation import (
-    LoginQueryValidationBehavior,
-    RegisterCommandValidationBehavior,
-)
-from src.application.common.interfaces import (
-    DateTimeProvider,
-    JwtTokenGenerator,
-)
-from src.application.common.mapper.interface import AuthMapper, MainMapper, MenuMapper
-from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
-from src.application.persistence.menu_repo import MenuRepository
-from src.application.persistence.user_repo import UserRepository
-from src.infrastructure.authentication import JwtTokenGeneratorImpl
-from src.infrastructure.converter.mapper.auth import AuthMapperImpl
-from src.infrastructure.converter.mapper.main import MainMapperImpl
-from src.infrastructure.converter.mapper.menu import MenuMapperImpl
 from src.infrastructure.converter.retort import setup_retort
-from src.infrastructure.mediator.main import setup_mediatr
-from src.infrastructure.persistence.menu_repo import MenuRepositoryImpl
-from src.infrastructure.persistence.user_repo import UserRepositoryImpl
-from src.infrastructure.services.dt_provider import DateTimeProviderImpl
+
+from .extra import setup_extra_di
+from .mapper import setup_mapper_di
+from .mediatr import setup_mediatr_di
+from .repository import setup_repositories_di
 
 
 def build_application_container() -> Container:
@@ -41,27 +16,9 @@ def build_application_container() -> Container:
     container.add_instance(logging.getLogger(__name__), logging.Logger)
     container.add_instance(setup_retort())
 
-    container.add_singleton(MainMapper, MainMapperImpl)
-    container.add_singleton(AuthMapper, AuthMapperImpl)
-    container.add_singleton(MenuMapper, MenuMapperImpl)
-
-    container.add_singleton(JwtTokenGenerator, JwtTokenGeneratorImpl)
-    container.add_singleton(DateTimeProvider, DateTimeProviderImpl)
-
-    container.add_singleton(UserRepository, UserRepositoryImpl)
-    container.add_singleton(MenuRepository, MenuRepositoryImpl)
-
-    container.add_singleton_by_factory(setup_mediatr, Mediator)
-
-    # Register mediatr command
-    container.add_scoped(Validator[RegisterCommand], RegisterCommandValidator)
-    container.add_scoped(RegisterCommandValidationBehavior)
-    container.register(RegisterCommandHandler)
-    # Login mediatr query
-    container.add_scoped(Validator[LoginQuery], LoginQueryValidator)
-    container.add_scoped(LoginQueryValidationBehavior)
-
-    container.register(LoginQueryHandler)
-    container.register(CreateMenuCommandHandler)
+    setup_mapper_di(container)
+    setup_extra_di(container)
+    setup_mediatr_di(container)
+    setup_repositories_di(container)
 
     return container
