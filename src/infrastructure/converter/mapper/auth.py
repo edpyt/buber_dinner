@@ -13,7 +13,9 @@ from src.contracts.authentication.register_request import RegisterRequest
 
 
 class AuthMapperImpl(AuthMapper):
-    def __init__(self) -> None:
+    def __init__(self, retort: Retort) -> None:
+        self._retort = retort
+
         self.convert_register_request_to_command = get_converter(  # type: ignore [method-assign]
             RegisterRequest,
             RegisterCommand,
@@ -23,15 +25,9 @@ class AuthMapperImpl(AuthMapper):
             LoginQuery,
         )
 
-        super().__init__()
-
-    def convert_auth_result_to_response(
-        self,
-        src: AuthenticationResult,
-        retort: Retort,
-    ) -> AuthenticationResponse:
-        auth_result_data = self._convert_to_flatten_dict(retort.dump(src))
-        auth_response: AuthenticationResponse = retort.load(
+    def convert_auth_result_to_response(self, src: AuthenticationResult) -> AuthenticationResponse:
+        auth_result_data = self._convert_to_flatten_dict(self._retort.dump(src))
+        auth_response: AuthenticationResponse = self._retort.load(
             auth_result_data,
             AuthenticationResponse,
         )

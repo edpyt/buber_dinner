@@ -9,12 +9,12 @@ from src.contracts.authentication.authentication_response import AuthenticationR
 from src.contracts.menu.create_menu_request import CreateMenuRequest, MenuItem, MenuSection
 
 
-def test_convert_auth_result_to_response(mapper: MainMapper, retort: Retort) -> None:
+def test_convert_auth_result_to_response(mapper: MainMapper) -> None:
     auth_result = AuthenticationResult(
         user=UserDTO(uuid4(), "test", "test", "test", "test"),
         token="test",
     )
-    auth_response = mapper.auth.convert_auth_result_to_response(auth_result, retort)
+    auth_response = mapper.auth.convert_auth_result_to_response(auth_result)
 
     assert isinstance(auth_response, AuthenticationResponse)
     assert auth_result.user.id == auth_response.id

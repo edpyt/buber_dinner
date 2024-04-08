@@ -13,7 +13,7 @@ def create_retort() -> Retort:
 
 
 @pytest.fixture(name="mapper", scope="session")
-def create_mapper_impl() -> MainMapper:
-    auth_mapper = AuthMapperImpl()
+def create_mapper_impl(retort: Retort) -> MainMapper:
+    auth_mapper = AuthMapperImpl(retort)
     menu_mapper = MenuMapperImpl()
     return MainMapperImpl(auth=auth_mapper, menu=menu_mapper)
