@@ -1,3 +1,5 @@
+from typing import Callable
+
 from adaptix.conversion import coercer, get_converter
 
 from src.application.common.mapper.interface import MenuMapper
@@ -10,8 +12,11 @@ from src.contracts.menu.create_menu_request import CreateMenuRequest, MenuItem, 
 from src.contracts.menu.menu_response import MenuItemResponse, MenuResponse, MenuSectionResponse
 from src.domain.menu.menu import Menu
 
-__convert_menu_item_to_command = get_converter(MenuItem, MenuItemCommand)
-__convert_menu_section_to_command = get_converter(
+__convert_menu_item_to_command: Callable[[MenuItem], MenuItemCommand] = get_converter(
+    MenuItem,
+    MenuItemCommand,
+)
+__convert_menu_section_to_command: Callable[[MenuSection], MenuSectionCommand] = get_converter(
     MenuSection,
     MenuSectionCommand,
     recipe=[
