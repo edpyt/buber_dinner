@@ -5,12 +5,12 @@ from blacksheep import FromJSON, Response, auth, ok
 from blacksheep.server.controllers import APIController, post
 from mediatr import Mediator
 
-from src.application.common.mapper.interface import Mapper
+from src.application.common.mapper.interface import MainMapper
 from src.contracts.menu.create_menu_request import CreateMenuRequest
 
 
 class MenusController(APIController):
-    _mapper: Mapper
+    _mapper: MainMapper
     _mediator: Mediator
 
     @classmethod
@@ -36,6 +36,6 @@ class MenusController(APIController):
             {**create_menu_request.value, "host_id": str(host_id)},
             CreateMenuRequest,
         )
-        command = self._mapper.convert_create_menu_request_to_command(create_menu_request)
+        command = self._mapper.menu.convert_create_menu_request_to_command(create_menu_request)
         result = await self._mediator.send(command)
-        return ok(self._mapper.convert_menu_result_to_response(result))
+        return ok(self._mapper.menu.convert_menu_result_to_response(result))
