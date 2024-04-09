@@ -15,6 +15,7 @@ def build_api() -> Application:
     setup_api_di(di_container)
     app = Application(services=di_container, show_error_details=True)
     setup_app(app)
+
     return app
 
 

@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Callable, Coroutine
+from typing import AsyncGenerator, Callable, Coroutine, Generator
 
 import pytest
 from blacksheep import Application, JSONContent
@@ -8,8 +8,15 @@ from src.application.dto.user import UserDTO
 from src.application.persistence.user_repo import UserRepository
 from src.infrastructure.config.jwt import JWTConfig
 from src.infrastructure.persistence.user_repo import UserRepositoryImpl
+from testcontainers.clickhouse import ClickHouseContainer
 
 from tests.integration.di import DIOverride, setup_test_di
+
+
+@pytest.fixture(name="clickhouse_db", scope="session")
+def create_clickhouse_db() -> Generator[ClickHouseContainer, None, None]:
+    with ClickHouseContainer() as ch:
+        yield ch
 
 
 @pytest.fixture(scope="session")
@@ -18,7 +25,10 @@ def jwt_config() -> JWTConfig:
 
 
 @pytest.fixture(name="app", scope="session")
-async def create_app(jwt_config: JWTConfig) -> AsyncGenerator[Application, None]:
+async def create_app(
+    jwt_config: JWTConfig,
+    clickhouse_db: ClickHouseContainer,
+) -> AsyncGenerator[Application, None]:
     app: Application = build_api()
     setup_test_di(app, DIOverride(jwt_config))
     await app.start()

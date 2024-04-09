@@ -7,7 +7,7 @@ from src.infrastructure.converter.retort import setup_retort
 from .extra import setup_extra_di
 from .mapper import setup_mapper_di
 from .mediatr import setup_mediatr_di
-from .repository import setup_repositories_di
+from .persistence import setup_persistence_di
 
 
 def build_application_container() -> Container:
@@ -19,6 +19,6 @@ def build_application_container() -> Container:
     setup_mapper_di(container)
     setup_extra_di(container)
     setup_mediatr_di(container)
-    setup_repositories_di(container)
+    setup_persistence_di(container)
 
     return container
