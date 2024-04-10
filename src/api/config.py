@@ -15,6 +15,6 @@ class Config(BaseModel):
 def create_config_obj() -> Config:
     config_data = read_toml(Path("./config_dist/config.toml"))
     return Config(
-        jwt_config=config_data["jwt_settings"],
-        db_config=config_data["db_settings"],
+        jwt_config=config_data["jwt"],
+        db_config=config_data["db"],
     )

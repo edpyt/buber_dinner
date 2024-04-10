@@ -8,8 +8,8 @@ from src.infrastructure.persistence.db.main import (
     create_session,
     session_factory,
 )
-from src.infrastructure.persistence.menu_repo import MenuRepositoryImpl
-from src.infrastructure.persistence.user_repo import UserRepositoryImpl
+from src.infrastructure.persistence.repositories.menu_repo import MenuRepositoryImpl
+from src.infrastructure.persistence.repositories.user_repo import UserRepositoryImpl
 
 
 def setup_persistence_di(container: Container) -> None:

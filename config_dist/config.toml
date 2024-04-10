@@ -1,8 +1,8 @@
-[jwt_settings]
+[jwt]
 jwt_secret = "super-secret-key"
 expiry_minutes = 0
 
-[db_settings]
+[db]
 sa_db = "clickhouse"
 sa_engine = "asynch"
 host = "localhost"
