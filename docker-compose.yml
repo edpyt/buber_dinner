@@ -3,6 +3,8 @@ services:
     container_name: api
     build:
       context: .
+      dockerfile: Dockerfile
+      target: dev
     command: >
       uvicorn src.api.main:build_api
               --factory
@@ -32,3 +34,11 @@ services:
       retries: 16
     env_file:
       - ./.env
+
+  migrations:
+    container_name: migrations
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrations
+    command: alembic
