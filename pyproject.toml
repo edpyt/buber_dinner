@@ -30,9 +30,12 @@ pytest = "^8.0.2"
 pytest-asyncio = "^0.23.5"
 testcontainers = "^4.3.3"
 
+[tool.poetry.group.dev]
+optional = true
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"
+ruff = "^0.3.6"
 
 [build-system]
 requires = ["poetry-core"]
@@ -78,6 +81,9 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
    "S106"
+]
+"*/migrations/versions/*" = [
+   "N999"
 ]
 
 [tool.pytest.ini_options]
