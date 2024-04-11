@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-from src.api import build_api
+from src.api.main import build_api
 from src.application.dto.user import UserDTO
 from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository

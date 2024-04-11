@@ -12,6 +12,7 @@ services:
               --host 0.0.0.0
               --port 8000
     volumes:
+      - ./src:/app/src/:ro
       - ./config_dist:/app/config_dist:ro
     ports:
       - 8000:8000
@@ -27,6 +28,8 @@ services:
     ports:
       - 8123:8123
       - 9000:9000
+    expose:
+      - 9000
     healthcheck:
       test: wget --no-verbose --tries=1 --spider localhost:8123/ping || exit 1
       interval: 2s
@@ -41,4 +44,11 @@ services:
       context: .
       dockerfile: Dockerfile
       target: migrations
-    command: alembic
+    volumes:
+      - ./config_dist:/app/config_dist:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: alembic upgrade head
+    environment:
+      - DB_HOST=db

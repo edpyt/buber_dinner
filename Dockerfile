@@ -16,5 +16,10 @@ RUN uv pip install --no-cache \
                       -r requirements.txt
 
 FROM build as migrations
-RUN python -m pip install poetry
-RUN poetry install --only db
+COPY ./alembic.ini /app/
+RUN python -m pip install --no-cache poetry
+RUN poetry config virtualenvs.create false && \
+    poetry install --only db
+
+# FIXME: added for config read, change `DBConfig` to `dataclass`
+RUN pip install pydantic

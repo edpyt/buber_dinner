@@ -1,5 +1,8 @@
-from clickhouse_sqlalchemy.ext.declarative import ClickHouseDeclarativeMeta
-from sqlalchemy.orm import DeclarativeBase
+from clickhouse_sqlalchemy import engines, get_declarative_base
+
+Base = get_declarative_base()
 
 
-class Base(DeclarativeBase, metaclass=ClickHouseDeclarativeMeta): ...
+class BaseCH(Base):  # type: ignore
+    __abstract__ = True
+    __table_args__ = (engines.Memory(),)

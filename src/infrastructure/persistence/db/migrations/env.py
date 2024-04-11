@@ -1,4 +1,5 @@
 import asyncio
+import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -22,7 +23,9 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 if not (full_url := config.get_main_option("sqlalchemy.url")):
-    full_url = create_config_obj().db_config.full_url
+    db_config = create_config_obj().db_config
+    db_config.host = os.getenv("DB_HOST", db_config.host)
+    full_url = db_config.full_url
 
 
 def run_migrations_offline() -> None:
@@ -71,6 +74,7 @@ async def run_async_migrations() -> None:
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        url=full_url,
     )
 
     async with connectable.connect() as connection:
