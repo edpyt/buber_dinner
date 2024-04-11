@@ -3,7 +3,6 @@ name = "clean-architecture-ddd"
 version = "0.1.0"
 description = ""
 authors = ["edpyt <edrsa1321s@gmail.com>"]
-readme = "README.md"
 packages = [{ include = "src" }]
 
 [tool.poetry.dependencies]
