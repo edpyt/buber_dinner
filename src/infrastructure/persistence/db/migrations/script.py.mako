@@ -20,8 +20,8 @@ depends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}
 
 
 def upgrade() -> None:
-    ${upgrades if upgrades else "pass"}
+    ${upgrades if upgrades else "..."}
 
 
 def downgrade() -> None:
-    ${downgrades if downgrades else "pass"}
+    ${downgrades if downgrades else "..."}
