@@ -1,19 +1,20 @@
 """init
 
-Revision ID: 88a29840f990
+Revision ID: 442884d0459f
 Revises:
-Create Date: 2024-04-12 18:18:45.019575
+Create Date: 2024-04-13 14:34:11.560119
 
 """
 
 from typing import Sequence, Union
 
 import clickhouse_sqlalchemy
+import clickhouse_sqlalchemy.engines
 import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "88a29840f990"
+revision: str = "442884d0459f"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,7 +27,7 @@ def upgrade() -> None:
         sa.Column("id", clickhouse_sqlalchemy.types.common.UUID(), nullable=False),
         sa.Column("name", clickhouse_sqlalchemy.types.common.String(), nullable=False),
         sa.Column("description", clickhouse_sqlalchemy.types.common.String(), nullable=False),
-        sa.Column("average_rating", clickhouse_sqlalchemy.types.common.Decimal(), nullable=False),
+        sa.Column("average_rating", clickhouse_sqlalchemy.types.common.Float(), nullable=False),
         sa.Column("host_id", clickhouse_sqlalchemy.types.common.UUID(), nullable=False),
         sa.Column(
             "created_date_time", clickhouse_sqlalchemy.types.common.DateTime(), nullable=False,
@@ -35,6 +36,7 @@ def upgrade() -> None:
             "updated_date_time", clickhouse_sqlalchemy.types.common.DateTime(), nullable=False,
         ),
         sa.PrimaryKeyConstraint("id"),
+        clickhouse_sqlalchemy.engines.Memory(),
     )
     # ### end Alembic commands ###
 

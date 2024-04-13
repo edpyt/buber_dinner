@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from src.api.config import create_config_obj
 from src.infrastructure.persistence.db.models.base import Base
 
-# BUG: without import models autogenerate migrations doesn't work ;(
+# Models
 from src.infrastructure.persistence.db.models.menu import Menu  # noqa: F401
 
 # this is the Alembic Config object, which provides
@@ -63,7 +63,10 @@ def do_run_migrations(connection: Connection) -> None:
 
     with context.begin_transaction():
         patch_alembic_version(context)
-        context.run_migrations()
+        try:
+            context.run_migrations()
+        except Exception as e:  # noqa: BLE001
+            print("Error:", repr(e), str(e))  # noqa: T201
 
 
 async def run_async_migrations() -> None:
