@@ -111,10 +111,9 @@ async def create_sa_session_factory(
 
 @pytest.fixture(name="sa_session")
 async def create_async_sa_session(
-    sa_engine: AsyncEngine,
     sa_session_factory: async_sessionmaker,
 ) -> AsyncGenerator[AsyncSession, None]:
-    async with sa_engine.connect() as conn, sa_session_factory(bind=conn) as session:
+    async with sa_session_factory() as session:
         yield session
 
 
