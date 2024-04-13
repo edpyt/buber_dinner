@@ -1,6 +1,7 @@
 from typing import AsyncGenerator, Callable, Coroutine, Generator
 
 import pytest
+from alembic.config import Config as AlembicConfig
 from blacksheep import Application, JSONContent
 from blacksheep.testing import TestClient
 from sqlalchemy.ext.asyncio import (
@@ -20,12 +21,18 @@ from src.infrastructure.persistence.repositories.user_repo import UserRepository
 from testcontainers.clickhouse import ClickHouseContainer
 
 from tests.integration.di import DIOverride, setup_test_di
+from tests.integration.utils.db import migrate_db
 
 
 @pytest.fixture(name="clickhouse_db", scope="session")
 def create_clickhouse_db() -> Generator[ClickHouseContainer, None, None]:
     with ClickHouseContainer() as ch:
         yield ch
+
+
+@pytest.fixture(name="alembic_config", scope="session")
+def create_alembic_config() -> AlembicConfig:
+    return AlembicConfig("alembic.ini")
 
 
 @pytest.fixture(name="db_config", scope="session")
@@ -58,22 +65,43 @@ async def create_app(
 
 
 @pytest.fixture
-def test_client(
-    app: Application,
-    user_repo: UserRepository,
-) -> TestClient:
-    setup_test_di(app, di_overrides=[DIOverride(user_repo, UserRepository)])
+def di_overrides(user_repo: UserRepository, menu_repo: MenuRepository) -> list[DIOverride]:
+    return [DIOverride(user_repo, UserRepository), DIOverride(menu_repo, MenuRepository)]
+
+
+@pytest.fixture
+def test_client(app: Application, di_overrides: list[DIOverride]) -> TestClient:
+    setup_test_di(app, di_overrides=di_overrides)
     client: TestClient = TestClient(app)
     return client
 
 
 @pytest.fixture(name="sa_engine", scope="session")
-def create_sa_engine(db_config: DBConfig) -> AsyncEngine:
-    return create_async_engine(db_config.full_url)
+async def create_sa_engine(db_config: DBConfig) -> AsyncGenerator[AsyncEngine, None]:
+    engine = create_async_engine(db_config.full_url)
+    yield engine
+    await engine.dispose()
+
+
+@pytest.fixture(scope="session")
+async def _run_db_migrations(
+    alembic_config: AlembicConfig,
+    db_config: DBConfig,
+) -> None:
+    migration_engine = create_async_engine(db_config.full_url)
+
+    async with migration_engine.connect() as conn:
+        alembic_config.set_main_option("sqlalchemy.url", db_config.full_url)
+        await conn.run_sync(migrate_db, alembic_config)
+
+    await migration_engine.dispose()
 
 
 @pytest.fixture(name="sa_session_factory", scope="session")
-def create_sa_session_factory(sa_engine: AsyncEngine) -> async_sessionmaker:
+async def create_sa_session_factory(
+    sa_engine: AsyncEngine,
+    _run_db_migrations: None,
+) -> async_sessionmaker:
     return async_sessionmaker(
         bind=sa_engine,
         autoflush=False,
@@ -82,7 +110,7 @@ def create_sa_session_factory(sa_engine: AsyncEngine) -> async_sessionmaker:
 
 
 @pytest.fixture(name="sa_session")
-async def retrieve_async_sa_session(
+async def create_async_sa_session(
     sa_engine: AsyncEngine,
     sa_session_factory: async_sessionmaker,
 ) -> AsyncGenerator[AsyncSession, None]:

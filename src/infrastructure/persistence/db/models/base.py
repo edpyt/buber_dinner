@@ -1,6 +1,8 @@
-from clickhouse_sqlalchemy import engines, get_declarative_base
+from clickhouse_sqlalchemy import engines
+from clickhouse_sqlalchemy.ext.declarative import ClickHouseDeclarativeMeta
+from sqlalchemy.orm import declarative_base
 
-Base = get_declarative_base()
+Base = declarative_base(metaclass=ClickHouseDeclarativeMeta)
 
 
 class BaseCH(Base):  # type: ignore

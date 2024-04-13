@@ -41,9 +41,6 @@ ruff = "^0.3.6"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.mypy]
-exclude = ["tests"]
-
 [tool.ruff]
 line-length = 99
 src = ["src"]

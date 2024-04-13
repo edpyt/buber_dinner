@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 442884d0459f
+Revision ID: 684db1bbd454
 Revises:
-Create Date: 2024-04-13 14:34:11.560119
+Create Date: 2024-04-13 17:18:26.439017
 
 """
 
@@ -13,8 +13,11 @@ import clickhouse_sqlalchemy.engines
 import sqlalchemy as sa
 from alembic import op
 
+import src.infrastructure.persistence.db.types
+from src.application.menu.dto.average_rating import AverageRatingDTO
+
 # revision identifiers, used by Alembic.
-revision: str = "442884d0459f"
+revision: str = "684db1bbd454"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,15 +28,27 @@ def upgrade() -> None:
     op.create_table(
         "menu",
         sa.Column("id", clickhouse_sqlalchemy.types.common.UUID(), nullable=False),
-        sa.Column("name", clickhouse_sqlalchemy.types.common.String(), nullable=False),
-        sa.Column("description", clickhouse_sqlalchemy.types.common.String(), nullable=False),
-        sa.Column("average_rating", clickhouse_sqlalchemy.types.common.Float(), nullable=False),
-        sa.Column("host_id", clickhouse_sqlalchemy.types.common.UUID(), nullable=False),
+        sa.Column("name", clickhouse_sqlalchemy.types.common.String(length=100), nullable=False),
         sa.Column(
-            "created_date_time", clickhouse_sqlalchemy.types.common.DateTime(), nullable=False,
+            "description",
+            clickhouse_sqlalchemy.types.common.String(length=100),
+            nullable=False,
         ),
         sa.Column(
-            "updated_date_time", clickhouse_sqlalchemy.types.common.DateTime(), nullable=False,
+            "average_rating",
+            src.infrastructure.persistence.db.types.dataclass.DataclassType(AverageRatingDTO),
+            nullable=False,
+        ),
+        sa.Column("host_id", clickhouse_sqlalchemy.types.common.UUID(), nullable=False),
+        sa.Column(
+            "created_date_time",
+            clickhouse_sqlalchemy.types.common.DateTime(),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_date_time",
+            clickhouse_sqlalchemy.types.common.DateTime(),
+            nullable=False,
         ),
         sa.PrimaryKeyConstraint("id"),
         clickhouse_sqlalchemy.engines.Memory(),
