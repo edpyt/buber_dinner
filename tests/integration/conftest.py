@@ -1,7 +1,6 @@
 from typing import AsyncGenerator, Callable, Coroutine, Generator
 
 import pytest
-from alembic.config import Config as AlembicConfig
 from blacksheep import Application, JSONContent
 from blacksheep.testing import TestClient
 from sqlalchemy.ext.asyncio import (
@@ -16,32 +15,30 @@ from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository
 from src.infrastructure.config.db import DBConfig
 from src.infrastructure.config.jwt import JWTConfig
+from src.infrastructure.persistence.db.models.base import Base
 from src.infrastructure.persistence.repositories.menu_repo import MenuRepositoryImpl
 from src.infrastructure.persistence.repositories.user_repo import UserRepositoryImpl
-from testcontainers.clickhouse import ClickHouseContainer
+from testcontainers.compose import DockerCompose
 
 from tests.integration.di import DIOverride, setup_test_di
-from tests.integration.utils.db import migrate_db
 
 
-@pytest.fixture(name="clickhouse_db", scope="session")
-def create_clickhouse_db() -> Generator[ClickHouseContainer, None, None]:
-    with ClickHouseContainer() as ch:
-        yield ch
-
-
-@pytest.fixture(name="alembic_config", scope="session")
-def create_alembic_config() -> AlembicConfig:
-    return AlembicConfig("alembic.ini")
+@pytest.fixture(name="cockroach_db", scope="session")
+def create_cockroach_db() -> Generator[DockerCompose, None, None]:
+    cockroach = DockerCompose(".", "docker-compose.test.yml", build=True, wait=True)
+    with cockroach:
+        print("Start db container...")  # noqa: T201
+        yield cockroach
+        print("Shutdown db container...")  # noqa: T201
 
 
 @pytest.fixture(name="db_config", scope="session")
-def create_db_config(clickhouse_db: ClickHouseContainer) -> DBConfig:
+def create_db_config(cockroach_db: DockerCompose) -> DBConfig:
     return DBConfig(
         user="test",
         database="test",
         password="test",
-        port=clickhouse_db.get_exposed_port(clickhouse_db.port),
+        port=cockroach_db.get_service_port("testdb", 26257),
     )
 
 
@@ -53,7 +50,7 @@ def create_jwt_config() -> JWTConfig:
 @pytest.fixture(name="app", scope="session")
 async def create_app(
     jwt_config: JWTConfig,
-    clickhouse_db: ClickHouseContainer,
+    cockroach_db: DockerCompose,
 ) -> AsyncGenerator[Application, None]:
     app: Application = build_api()
 
@@ -84,16 +81,13 @@ async def create_sa_engine(db_config: DBConfig) -> AsyncGenerator[AsyncEngine, N
 
 
 @pytest.fixture(scope="session")
-async def _run_db_migrations(
-    alembic_config: AlembicConfig,
-    db_config: DBConfig,
-) -> None:
+async def _run_db_migrations(db_config: DBConfig) -> AsyncGenerator[None, None]:
     migration_engine = create_async_engine(db_config.full_url)
-
     async with migration_engine.connect() as conn:
-        alembic_config.set_main_option("sqlalchemy.url", db_config.full_url)
-        await conn.run_sync(migrate_db, alembic_config)
-
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+    async with migration_engine.connect() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
     await migration_engine.dispose()
 
 
@@ -111,9 +105,14 @@ async def create_sa_session_factory(
 
 @pytest.fixture(name="sa_session")
 async def create_async_sa_session(
+    sa_engine: AsyncEngine,
     sa_session_factory: async_sessionmaker,
 ) -> AsyncGenerator[AsyncSession, None]:
-    async with sa_session_factory() as session:
+    async with (
+        sa_engine.connect() as conn,
+        conn.begin(),
+        sa_session_factory(bind=conn) as session,
+    ):
         yield session
 
 

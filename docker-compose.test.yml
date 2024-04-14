@@ -1,0 +1,15 @@
+services:
+  testdb:
+    image: cockroachdb/cockroach:v23.1.18-fips
+    command: start-single-node
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health?ready=1"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    ports:
+      - 54329:26257
+    environment:
+      - COCKROACH_USER=test
+      - COCKROACH_PASSWORD=test
+      - COCKROACH_DATABASE=test

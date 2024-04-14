@@ -3,8 +3,8 @@ import json
 from dataclasses import asdict, is_dataclass
 from typing import Any, ClassVar, Dict, Protocol
 
-from clickhouse_sqlalchemy.types import String
 from sqlalchemy import Dialect, TypeDecorator
+from sqlalchemy.types import VARCHAR
 
 
 class IsDataclass(Protocol):
@@ -25,7 +25,7 @@ class DataclassEncoder(json.JSONEncoder):
 class DataclassType(TypeDecorator):
     """ClickHouse-SQLA Type decorator to serialize dataclasses"""
 
-    impl = String
+    impl = VARCHAR
     cache_ok = True
 
     def __init__(self, base_cls: type):

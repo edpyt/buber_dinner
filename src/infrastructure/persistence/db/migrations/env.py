@@ -3,7 +3,6 @@ import os
 from logging.config import fileConfig
 
 from alembic import context
-from clickhouse_sqlalchemy.alembic.dialect import include_object, patch_alembic_version
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
@@ -50,7 +49,6 @@ def run_migrations_offline() -> None:
     )
 
     with context.begin_transaction():
-        patch_alembic_version(context)
         context.run_migrations()
 
 
@@ -58,15 +56,10 @@ def do_run_migrations(connection: Connection) -> None:
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
-        include_object=include_object,
     )
 
     with context.begin_transaction():
-        patch_alembic_version(context)
-        try:
-            context.run_migrations()
-        except Exception as e:  # noqa: BLE001
-            print("Error:", repr(e), str(e))  # noqa: T201
+        context.run_migrations()
 
 
 async def run_async_migrations() -> None:

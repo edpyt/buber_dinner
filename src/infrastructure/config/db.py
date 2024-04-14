@@ -2,8 +2,8 @@ from pydantic import BaseModel
 
 
 class DBConfig(BaseModel):
-    sa_db: str = "clickhouse"
-    sa_engine: str = "asynch"
+    sa_db: str = "cockroachdb"
+    sa_engine: str | None = "asyncpg"
     host: str = "localhost"
     port: int = 9000
     database: str = "ch"
@@ -12,4 +12,7 @@ class DBConfig(BaseModel):
 
     @property
     def full_url(self) -> str:
-        return f"{self.sa_db}+{self.sa_engine}://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+        dialect = self.sa_db
+        if self.sa_engine:
+            dialect += f"+{self.sa_engine}"
+        return f"{dialect}://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
