@@ -1,9 +1,9 @@
 from typing import AsyncGenerator, Callable, Coroutine, Generator
 
 import pytest
-from alembic.config import Config as AlembicConfig
 from blacksheep import Application, JSONContent
 from blacksheep.testing import TestClient
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -16,32 +16,27 @@ from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository
 from src.infrastructure.config.db import DBConfig
 from src.infrastructure.config.jwt import JWTConfig
+from src.infrastructure.persistence.db.models.base import Base
 from src.infrastructure.persistence.repositories.menu_repo import MenuRepositoryImpl
 from src.infrastructure.persistence.repositories.user_repo import UserRepositoryImpl
-from testcontainers.clickhouse import ClickHouseContainer
+from testcontainers.postgres import PostgresContainer
 
 from tests.integration.di import DIOverride, setup_test_di
-from tests.integration.utils.db import migrate_db
 
 
-@pytest.fixture(name="clickhouse_db", scope="session")
-def create_clickhouse_db() -> Generator[ClickHouseContainer, None, None]:
-    with ClickHouseContainer() as ch:
-        yield ch
-
-
-@pytest.fixture(name="alembic_config", scope="session")
-def create_alembic_config() -> AlembicConfig:
-    return AlembicConfig("alembic.ini")
+@pytest.fixture(name="postgres_db", scope="session")
+def create_postgres_db() -> Generator[PostgresContainer, None, None]:
+    with PostgresContainer("postgres:16") as postgres:
+        yield postgres
 
 
 @pytest.fixture(name="db_config", scope="session")
-def create_db_config(clickhouse_db: ClickHouseContainer) -> DBConfig:
+def create_db_config(postgres_db: PostgresContainer) -> DBConfig:
     return DBConfig(
         user="test",
         database="test",
         password="test",
-        port=clickhouse_db.get_exposed_port(clickhouse_db.port),
+        port=postgres_db.get_exposed_port("5432"),
     )
 
 
@@ -53,7 +48,7 @@ def create_jwt_config() -> JWTConfig:
 @pytest.fixture(name="app", scope="session")
 async def create_app(
     jwt_config: JWTConfig,
-    clickhouse_db: ClickHouseContainer,
+    postgres_db: PostgresContainer,
 ) -> AsyncGenerator[Application, None]:
     app: Application = build_api()
 
@@ -83,24 +78,21 @@ async def create_sa_engine(db_config: DBConfig) -> AsyncGenerator[AsyncEngine, N
     await engine.dispose()
 
 
-@pytest.fixture(scope="session")
-async def _run_db_migrations(
-    alembic_config: AlembicConfig,
-    db_config: DBConfig,
-) -> None:
-    migration_engine = create_async_engine(db_config.full_url)
+@pytest.fixture(scope="session", autouse=True)
+def _run_db_migrations(db_config: DBConfig) -> Generator[None, None, None]:
+    migration_engine = create_engine(db_config.full_url.replace("+asyncpg", ""))
 
-    async with migration_engine.connect() as conn:
-        alembic_config.set_main_option("sqlalchemy.url", db_config.full_url)
-        await conn.run_sync(migrate_db, alembic_config)
+    with migration_engine.begin():
+        Base.metadata.create_all(migration_engine)
+        yield
+        Base.metadata.drop_all(migration_engine)
 
-    await migration_engine.dispose()
+    migration_engine.dispose()
 
 
 @pytest.fixture(name="sa_session_factory", scope="session")
 async def create_sa_session_factory(
     sa_engine: AsyncEngine,
-    _run_db_migrations: None,
 ) -> async_sessionmaker:
     return async_sessionmaker(
         bind=sa_engine,
@@ -111,14 +103,19 @@ async def create_sa_session_factory(
 
 @pytest.fixture(name="sa_session")
 async def create_async_sa_session(
+    sa_engine: AsyncEngine,
     sa_session_factory: async_sessionmaker,
 ) -> AsyncGenerator[AsyncSession, None]:
-    async with sa_session_factory() as session:
-        yield session
+    # Transactional session
+    async with sa_engine.connect() as conn:
+        trans = await conn.begin()
+        async with sa_session_factory(bind=conn) as session:
+            yield session
+        await trans.rollback()
 
 
 @pytest.fixture(name="menu_repo")
-async def create_menu_repository(sa_session: AsyncSession) -> MenuRepository:
+def create_menu_repository(sa_session: AsyncSession) -> MenuRepository:
     return MenuRepositoryImpl(sa_session)
 
 
