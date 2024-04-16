@@ -26,7 +26,7 @@ from tests.integration.di import DIOverride, setup_test_di
 
 @pytest.fixture(name="postgres_db", scope="session")
 def create_postgres_db() -> Generator[PostgresContainer, None, None]:
-    with PostgresContainer("postgres:16") as postgres:
+    with PostgresContainer("postgres:16-bullseye") as postgres:
         yield postgres
 
 
@@ -66,7 +66,7 @@ def di_overrides(user_repo: UserRepository, menu_repo: MenuRepository) -> list[D
 
 @pytest.fixture
 def test_client(app: Application, di_overrides: list[DIOverride]) -> TestClient:
-    setup_test_di(app, di_overrides=di_overrides)
+    setup_test_di(app, *di_overrides)
     client: TestClient = TestClient(app)
     return client
 
