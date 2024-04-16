@@ -1,10 +1,15 @@
+"""Dataclass type.
+
+Works only on psycopg, asyncpg engines.
+"""
+
 import enum
 import json
 from dataclasses import asdict, is_dataclass
 from typing import Any, ClassVar, Dict, Protocol
 
 from sqlalchemy import Dialect, TypeDecorator
-from sqlalchemy.types import VARCHAR
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 class IsDataclass(Protocol):
@@ -25,7 +30,7 @@ class DataclassEncoder(json.JSONEncoder):
 class DataclassType(TypeDecorator):
     """ClickHouse-SQLA Type decorator to serialize dataclasses"""
 
-    impl = VARCHAR
+    impl = JSONB  # You can change this value for support other engines
     cache_ok = True
 
     def __init__(self, base_cls: type):

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class DBConfig(BaseModel):
-    sa_db: str = "cockroachdb"
+    sa_db: str = "postgresql"
     sa_engine: str | None = "asyncpg"
     host: str = "localhost"
     port: int = 9000
