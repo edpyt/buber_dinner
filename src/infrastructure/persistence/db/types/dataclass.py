@@ -28,12 +28,12 @@ class DataclassEncoder(json.JSONEncoder):
 
 
 class DataclassType(TypeDecorator):
-    """ClickHouse-SQLA Type decorator to serialize dataclasses"""
+    """PostgreSQL-SQLA Type decorator to serialize dataclasses"""
 
     impl = JSONB  # You can change this value for support other engines
     cache_ok = True
 
-    def __init__(self, base_cls: type):
+    def __init__(self, base_cls: Any):
         super().__init__()
         self.base_cls = base_cls
 

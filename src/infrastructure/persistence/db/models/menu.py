@@ -1,8 +1,8 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.application.menu.dto.average_rating import AverageRatingDTO
 from src.infrastructure.persistence.db.types.dataclass import DataclassType
@@ -20,6 +20,18 @@ class Menu(Base):
     host_id: Mapped[UUID]
 
     # TODO: sections, dinner_ids, menu_review_ids
+    sections: Mapped[list["MenuSections"]] = relationship(back_populates="menu")
 
     created_date_time: Mapped[datetime]
     updated_date_time: Mapped[datetime]
+
+
+class MenuSections(Base):
+    __tablename__ = "menu_sections"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str] = mapped_column(String(100))
+
+    menu: Mapped[Menu] = relationship(back_populates="sections")
+    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"))

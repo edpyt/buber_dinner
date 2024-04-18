@@ -11,7 +11,7 @@ from src.api.config import create_config_obj
 from src.infrastructure.persistence.db.models.base import Base
 
 # Models
-from src.infrastructure.persistence.db.models.menu import Menu  # noqa: F401
+from src.infrastructure.persistence.db.models.menu import Menu, MenuSections  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
