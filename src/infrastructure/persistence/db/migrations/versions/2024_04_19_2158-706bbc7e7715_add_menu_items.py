@@ -1,8 +1,8 @@
 """add menu items
 
-Revision ID: 59291836f520
+Revision ID: 706bbc7e7715
 Revises: 9c297c215f3f
-Create Date: 2024-04-19 07:14:35.024453
+Create Date: 2024-04-19 21:58:56.505056
 
 """
 
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "59291836f520"
+revision: str = "706bbc7e7715"
 down_revision: Union[str, None] = "9c297c215f3f"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,8 +27,9 @@ def upgrade() -> None:
         sa.Column("description", sa.String(length=100), nullable=False),
         sa.Column("section_id", sa.Uuid(), nullable=False),
         sa.Column("menu_id", sa.Uuid(), nullable=False),
-        sa.ForeignKeyConstraint(["menu_id"], ["menu_sections.menu_id"]),
-        sa.ForeignKeyConstraint(["section_id"], ["menu_sections.id"]),
+        sa.ForeignKeyConstraint(
+            ["section_id", "menu_id"], ["menu_sections.id", "menu_sections.menu_id"],
+        ),
         sa.PrimaryKeyConstraint("id", "section_id", "menu_id"),
     )
     # ### end Alembic commands ###

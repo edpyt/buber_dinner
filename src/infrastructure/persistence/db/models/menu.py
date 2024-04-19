@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, ForeignKeyConstraint, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.application.menu.dto.average_rating import AverageRatingDTO
@@ -41,11 +41,20 @@ class MenuSection(Base):
 
 class MenuItem(Base):
     __tablename__ = "menu_items"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["section_id", "menu_id"],
+            ["menu_sections.id", "menu_sections.menu_id"],
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(String(100))
 
-    section: Mapped[MenuSection] = relationship(back_populates="items")
-    section_id: Mapped[UUID] = mapped_column(ForeignKey("menu_sections.id"), primary_key=True)
-    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu_sections.menu_id"), primary_key=True)
+    section_id: Mapped[UUID] = mapped_column(primary_key=True)
+    menu_id: Mapped[UUID] = mapped_column(primary_key=True)
+    section: Mapped[MenuSection] = relationship(
+        back_populates="items",
+        foreign_keys=[menu_id, section_id],
+    )
