@@ -33,5 +33,19 @@ class MenuSection(Base):
     name: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(String(100))
 
+    items: Mapped[list["MenuItem"]] = relationship(back_populates="section")
+
     menu: Mapped[Menu] = relationship(back_populates="sections")
     menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"), primary_key=True)
+
+
+class MenuItem(Base):
+    __tablename__ = "menu_items"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str] = mapped_column(String(100))
+
+    section: Mapped[MenuSection] = relationship(back_populates="items")
+    section_id: Mapped[UUID] = mapped_column(ForeignKey("menu_sections.id"), primary_key=True)
+    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu_sections.menu_id"), primary_key=True)
