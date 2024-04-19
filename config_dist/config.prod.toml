@@ -1,0 +1,12 @@
+[jwt]
+jwt_secret = "super-secret-key"
+expiry_minutes = 0
+
+[db]
+sa_db = "postgresql"
+sa_engine = "asyncpg"
+host = "localhost"
+port = 5432
+database = "buber_dinner"
+user = "buber_dinner"
+password = "buber_dinner"

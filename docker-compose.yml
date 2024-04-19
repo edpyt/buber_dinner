@@ -19,6 +19,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - BUBER_DINNER_CONFIG_PATH=config_dist/config.prod.toml
 
   db:
     container_name: db
@@ -50,3 +52,4 @@ services:
     command: alembic upgrade head
     environment:
       - DB_HOST=db
+      - BUBER_DINNER_CONFIG_PATH=config_dist/config.prod.toml

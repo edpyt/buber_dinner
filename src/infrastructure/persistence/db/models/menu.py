@@ -19,7 +19,7 @@ class Menu(Base):
     average_rating: Mapped[AverageRatingDTO] = mapped_column(DataclassType(AverageRatingDTO))
     host_id: Mapped[UUID]
 
-    # TODO: sections, dinner_ids, menu_review_ids
+    # TODO: dinner_ids, menu_review_ids
     sections: Mapped[list["MenuSections"]] = relationship(back_populates="menu")
 
     created_date_time: Mapped[datetime]

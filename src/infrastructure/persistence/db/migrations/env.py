@@ -1,5 +1,4 @@
 import asyncio
-import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -7,7 +6,6 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from src.api.config import create_config_obj
 from src.infrastructure.persistence.db.models.base import Base
 
 # Models
@@ -22,8 +20,16 @@ config = context.config
 fileConfig(config.config_file_name)
 
 if not (full_url := config.get_main_option("sqlalchemy.url")):
-    db_config = create_config_obj().db_config
+    import os
+
+    from src.infrastructure.config.db import DBConfig
+    from src.infrastructure.config_loader import read_toml
+
+    config_data = read_toml()
+
+    db_config = DBConfig(**config_data["db"])
     db_config.host = os.getenv("DB_HOST", db_config.host)
+
     full_url = db_config.full_url
 
 target_metadata = Base.metadata

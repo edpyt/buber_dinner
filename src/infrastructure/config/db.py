@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class DBConfig(BaseModel):
+@dataclass
+class DBConfig:
     sa_db: str = "postgresql"
     sa_engine: str | None = "asyncpg"
     host: str = "localhost"

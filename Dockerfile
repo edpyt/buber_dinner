@@ -5,21 +5,18 @@ WORKDIR /app/
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY ./pyproject.toml /app/
 COPY ./src /app/src
+COPY ./requirements /app/requirements
+
+RUN python -m pip install uv
 
 FROM build as dev
-RUN python -m pip install uv
-RUN uv pip compile pyproject.toml -o requirements.txt
 RUN uv pip install --no-cache \
-                      --python $(which python3.11) \
-                      -r requirements.txt
+                   --python $(which python3.11) \
+                   -r /app/requirements/dev.txt
 
 FROM build as migrations
 COPY ./alembic.ini /app/
-RUN python -m pip install --no-cache poetry
-RUN poetry config virtualenvs.create false && \
-    poetry install --only db
-
-# FIXME: added for config read, change `DBConfig` to `dataclass`
-RUN pip install pydantic
+RUN uv pip install --no-cache \
+                   --python $(which python3.11) \
+                   -r /app/requirements/migrations.txt

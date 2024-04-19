@@ -1,4 +1,3 @@
-from pathlib import Path
 
 from pydantic import BaseModel
 
@@ -13,7 +12,7 @@ class Config(BaseModel):
 
 
 def create_config_obj() -> Config:
-    config_data = read_toml(Path("./config_dist/config.toml"))
+    config_data = read_toml()
     return Config(
         jwt_config=config_data["jwt"],
         db_config=config_data["db"],
