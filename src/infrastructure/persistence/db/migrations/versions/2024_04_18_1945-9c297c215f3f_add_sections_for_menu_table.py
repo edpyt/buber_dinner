@@ -27,7 +27,7 @@ def upgrade() -> None:
         sa.Column("description", sa.String(length=100), nullable=False),
         sa.Column("menu_id", sa.Uuid(), nullable=False),
         sa.ForeignKeyConstraint(["menu_id"], ["menu.id"]),
-        sa.PrimaryKeyConstraint("id"),
+        sa.PrimaryKeyConstraint("id", "menu_id"),
     )
     # ### end Alembic commands ###
 

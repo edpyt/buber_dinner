@@ -20,13 +20,13 @@ class Menu(Base):
     host_id: Mapped[UUID]
 
     # TODO: dinner_ids, menu_review_ids
-    sections: Mapped[list["MenuSections"]] = relationship(back_populates="menu")
+    sections: Mapped[list["MenuSection"]] = relationship(back_populates="menu")
 
     created_date_time: Mapped[datetime]
     updated_date_time: Mapped[datetime]
 
 
-class MenuSections(Base):
+class MenuSection(Base):
     __tablename__ = "menu_sections"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
@@ -34,4 +34,4 @@ class MenuSections(Base):
     description: Mapped[str] = mapped_column(String(100))
 
     menu: Mapped[Menu] = relationship(back_populates="sections")
-    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"))
+    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"), primary_key=True)

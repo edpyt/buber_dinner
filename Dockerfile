@@ -11,12 +11,14 @@ COPY ./requirements /app/requirements
 RUN python -m pip install uv
 
 FROM build as dev
+
 RUN uv pip install --no-cache \
-                   --python $(which python3.11) \
-                   -r /app/requirements/dev.txt
+    --python $(which python3.11) \
+    -r /app/requirements/dev.txt
 
 FROM build as migrations
 COPY ./alembic.ini /app/
+
 RUN uv pip install --no-cache \
-                   --python $(which python3.11) \
-                   -r /app/requirements/migrations.txt
+    --python $(which python3.11) \
+    -r /app/requirements/migrations.txt
