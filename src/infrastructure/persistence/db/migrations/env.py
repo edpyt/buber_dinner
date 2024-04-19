@@ -6,16 +6,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from src.infrastructure.persistence.db.models import *  # noqa: F403
 from src.infrastructure.persistence.db.models.base import Base
-
-# Models ------------------------------------------------------------------
-from src.infrastructure.persistence.db.models.menu import (  # noqa: F401
-    Menu,
-    MenuItem,
-    MenuSection,
-)
-
-# ------------------------------------------------------------------------
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

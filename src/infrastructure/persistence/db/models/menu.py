@@ -1,5 +1,5 @@
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from sqlalchemy import ForeignKey, ForeignKeyConstraint, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -19,8 +19,9 @@ class Menu(Base):
     average_rating: Mapped[AverageRatingDTO] = mapped_column(DataclassType(AverageRatingDTO))
     host_id: Mapped[UUID]
 
-    # TODO: dinner_ids, menu_review_ids
     sections: Mapped[list["MenuSection"]] = relationship(back_populates="menu")
+    dinner_ids: Mapped[list["MenuDinnerIds"]] = relationship(backref="menu")
+    review_ids: Mapped[list["MenuReviewIds"]] = relationship(backref="menu")
 
     created_date_time: Mapped[datetime]
     updated_date_time: Mapped[datetime]
@@ -58,3 +59,19 @@ class MenuItem(Base):
         back_populates="items",
         foreign_keys=[menu_id, section_id],
     )
+
+
+class MenuDinnerIds(Base):
+    __tablename__ = "menu_dinner_ids"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"))
+    dinner_id: Mapped[UUID] = mapped_column(ForeignKey("dinner.id"))
+
+
+class MenuReviewIds(Base):
+    __tablename__ = "menu_review_ids"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"))
+    review_id: Mapped[UUID] = mapped_column(ForeignKey("menu_review.id"))

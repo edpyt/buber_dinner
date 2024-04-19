@@ -31,7 +31,6 @@ async def test_add_menu(menu_repo: MenuRepository) -> None:
     )
 
     await menu_repo.add(menu_db)
-
     resp = await menu_repo.get_all()
 
     assert resp == [menu_db]
