@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Protocol, TypeVar
 
 from src.application.authentication.commands.register.command import RegisterCommand
 from src.application.authentication.queries.login.query import LoginQuery
@@ -29,7 +29,11 @@ class AuthMapper(Mapper, Protocol):
     def convert_login_request_to_query(self, src: LoginRequest) -> LoginQuery: ...
 
 
+PersistenceMenu = TypeVar("PersistenceMenu")
+
+
 class MenuMapper(Mapper, Protocol):
+    def convert_entity_to_persistence_model(self, src: Menu) -> PersistenceMenu: ...  # type: ignore
     def convert_create_menu_request_to_command(
         self,
         src: CreateMenuRequest,

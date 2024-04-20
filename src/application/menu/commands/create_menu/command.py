@@ -4,7 +4,7 @@ from uuid import UUID
 
 @dataclass(frozen=True)
 class CreateMenuCommand:
-    host_id: UUID
+    host_id: UUID | None
     name: str
     description: str
     sections: list["MenuSectionCommand"]

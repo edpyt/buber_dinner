@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from uuid import UUID
 
 from adaptix import Retort
@@ -22,7 +23,7 @@ class MenusController(APIController):
     async def create_menu(
         self,
         host_id: UUID,
-        create_menu_request: FromJSON,
+        create_menu_request: FromJSON[CreateMenuRequest],
         retort: Retort,
     ) -> Response:
         """
@@ -33,7 +34,7 @@ class MenusController(APIController):
         """
 
         create_menu_request = retort.load(
-            {**create_menu_request.value, "host_id": str(host_id)},
+            {**asdict(create_menu_request.value), "host_id": str(host_id)},
             CreateMenuRequest,
         )
         command = self._mapper.menu.convert_create_menu_request_to_command(create_menu_request)

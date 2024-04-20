@@ -8,9 +8,13 @@ from src.application.menu.commands.create_menu.command import (
     MenuItemCommand,
     MenuSectionCommand,
 )
+from src.application.menu.dto.average_rating import AverageRatingDTO
 from src.contracts.menu.create_menu_request import CreateMenuRequest, MenuItem, MenuSection
 from src.contracts.menu.menu_response import MenuItemResponse, MenuResponse, MenuSectionResponse
-from src.domain.menu.menu import Menu
+from src.domain.menu.menu import Menu  # FIXME: domain model in infrastructure layer
+from src.infrastructure.persistence.db.models import Menu as MenuDB
+from src.infrastructure.persistence.db.models import MenuItem as MenuItemDB
+from src.infrastructure.persistence.db.models import MenuSection as MenuSectionDB
 
 
 class MenuMapperImpl(MenuMapper):
@@ -44,6 +48,39 @@ class MenuMapperImpl(MenuMapper):
                     ),
                 ),
             ],
+        )
+
+    def convert_entity_to_persistence_model(self, src: Menu) -> MenuDB:
+        return MenuDB(
+            id=src.id.value,
+            name=src.name,
+            sections=[
+                MenuSectionDB(
+                    id=section.id.value,
+                    name=section.name,
+                    description=section.description,
+                    items=[
+                        MenuItemDB(
+                            id=item.id.value,
+                            name=item.name,
+                            description=item.description,
+                            menu_id=src.id.value,
+                            section_id=section.id.value,
+                        )
+                        for item in section.items
+                    ],
+                    menu_id=src.id.value,
+                )
+                for section in src.sections
+            ],
+            description=src.description,
+            average_rating=AverageRatingDTO(
+                value=src.average_rating.value,
+                num_ratings=src.average_rating.num_ratings,
+            ),
+            host_id=src.host_id.value,
+            created_date_time=src.created_date_time,
+            updated_date_time=src.updated_date_time,
         )
 
     def convert_menu_result_to_response(self, src: Menu) -> MenuResponse:

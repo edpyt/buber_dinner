@@ -24,6 +24,7 @@ class ErrorHandlingMiddleware:
         except Exception as e:
             response = await self.handle_exception(e)
             logger.exception(e)  # noqa: TRY401
+            raise
         return response
 
     async def handle_exception(self, exception: Exception) -> Response:

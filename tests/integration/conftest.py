@@ -75,8 +75,7 @@ def di_overrides(user_repo: UserRepository, menu_repo: MenuRepository) -> list[D
 @pytest.fixture
 def test_client(app: Application, di_overrides: list[DIOverride]) -> TestClient:
     setup_test_di(app, *di_overrides)
-    client: TestClient = TestClient(app)
-    return client
+    return TestClient(app)
 
 
 @pytest.fixture(scope="session")
@@ -170,4 +169,5 @@ async def create_auth_token(test_client: TestClient) -> str:
             },
         ),
     )
-    return (await auth_response.json())["token"]
+    auth_response_data = await auth_response.json()
+    return auth_response_data["token"]

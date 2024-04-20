@@ -4,10 +4,10 @@ from uuid import UUID
 
 @dataclass
 class CreateMenuRequest:
-    host_id: UUID
     name: str
     description: str
     sections: list["MenuSection"]
+    host_id: UUID | None = None
 
 
 @dataclass

@@ -15,4 +15,5 @@ class MenuRepositoryImpl(MenuRepository):
 
     async def add(self, menu: Menu) -> None:  # type: ignore[override]
         self.session.add(menu)
+        await self.session.flush([menu])
         await self.session.commit()
