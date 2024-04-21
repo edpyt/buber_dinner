@@ -1,0 +1,8 @@
+services:
+  test:
+    container_name: test
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    command: pytest tests -s -vv

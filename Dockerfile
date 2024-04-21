@@ -22,3 +22,9 @@ COPY ./alembic.ini /app/
 RUN uv pip install --no-cache \
     --python $(which python3.11) \
     -r /app/requirements/migrations.txt
+
+FROM dev as test
+COPY . .
+RUN uv pip install --no-cache \
+    --python $(which python3.11) \
+    -r /app/requirements/test.txt

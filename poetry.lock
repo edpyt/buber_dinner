@@ -1182,46 +1182,40 @@ typing = ["mypy (>=1.4)", "rich", "twisted"]
 
 [[package]]
 name = "testcontainers"
-version = "4.3.3"
+version = "4.0.0"
 description = "Python library for throwaway instances of anything that can run in a Docker container"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = ">=3.9,<4.0"
 files = [
-    {file = "testcontainers-4.3.3-py3-none-any.whl", hash = "sha256:e9309c53529e842485e4b326a754bb87b0ddaa78da6422275b52796c0cb7eb8b"},
-    {file = "testcontainers-4.3.3.tar.gz", hash = "sha256:48d5cc314be39ad8e678057347c49aef5f2786227470a2fcf43584fc79a8e4a0"},
+    {file = "testcontainers-4.0.0-py3-none-any.whl", hash = "sha256:9fa72e7d07344b91fa97884145d8ed1205b9bafb433ef4739653bf70ebb61e2c"},
+    {file = "testcontainers-4.0.0.tar.gz", hash = "sha256:33b83f3e78b2eee3b122bdf86d7b2867c7b31e088a19a456e527934280e7d5da"},
 ]
 
 [package.dependencies]
 docker = "*"
-typing-extensions = "*"
 urllib3 = "*"
 wrapt = "*"
 
 [package.extras]
 arangodb = ["python-arango (>=7.8,<8.0)"]
 azurite = ["azure-storage-blob (>=12.19,<13.0)"]
-chroma = ["chromadb-client"]
 clickhouse = ["clickhouse-driver"]
-google = ["google-cloud-datastore (>=2)", "google-cloud-pubsub (>=2)"]
-influxdb = ["influxdb", "influxdb-client"]
+google = ["google-cloud-pubsub (>=2)"]
 k3s = ["kubernetes", "pyyaml"]
+kafka = ["kafka-python"]
 keycloak = ["python-keycloak"]
 localstack = ["boto3"]
 minio = ["minio"]
 mongodb = ["pymongo"]
 mssql = ["pymssql", "sqlalchemy"]
 mysql = ["pymysql[rsa]", "sqlalchemy"]
-nats = ["nats-py"]
 neo4j = ["neo4j"]
 opensearch = ["opensearch-py"]
-oracle = ["oracledb", "sqlalchemy"]
-oracle-free = ["oracledb", "sqlalchemy"]
-qdrant = ["qdrant-client"]
+oracle = ["cx_Oracle", "sqlalchemy"]
+postgres = ["psycopg2-binary", "sqlalchemy"]
 rabbitmq = ["pika"]
 redis = ["redis"]
-registry = ["bcrypt"]
 selenium = ["selenium"]
-weaviate = ["weaviate-client (>=4.5.4,<5.0.0)"]
 
 [[package]]
 name = "typing-extensions"
@@ -1371,4 +1365,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "28d9b3980967fe651e1a203c7085df10c6e0b1c03523f1f5eb5be005dde90f36"
+content-hash = "8465652b41f45e15477bf994a73c308b79cc0c171374b0ddf46b22f9b73f6404"
