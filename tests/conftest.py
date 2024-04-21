@@ -8,7 +8,6 @@ def anyio_backend():
     return "asyncio"
 
 
-# BUG: without this i have error, wth......
 @pytest.fixture(scope="session")
 def event_loop():
     """

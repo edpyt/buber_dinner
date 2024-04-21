@@ -12,14 +12,13 @@ from src.infrastructure.config.db import DBConfig
 
 
 def create_sa_engine(db_config: DBConfig) -> AsyncEngine:
-    # BUG: why `rodi` sends ActivationScope here??
     if isinstance(db_config, ActivationScope):
         db_config = db_config.get(DBConfig)
     return create_async_engine(db_config.full_url)
 
 
 def session_factory(engine: AsyncEngine) -> async_sessionmaker:
-    return async_sessionmaker(bind=engine)
+    return async_sessionmaker(bind=engine, expire_on_commit=False)
 
 
 async def create_session(

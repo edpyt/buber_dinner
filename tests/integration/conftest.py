@@ -18,6 +18,7 @@ from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository
 from src.infrastructure.config.db import DBConfig
 from src.infrastructure.config.jwt import JWTConfig
+from src.infrastructure.persistence.db.main import create_sa_engine, session_factory
 from src.infrastructure.persistence.repositories.menu_repo import MenuRepositoryImpl
 from src.infrastructure.persistence.repositories.user_repo import UserRepositoryImpl
 from testcontainers.postgres import PostgresContainer
@@ -93,24 +94,21 @@ async def _run_db_migrations(alembic_config: AlembicConfig) -> None:
 
 
 @pytest.fixture(name="sa_engine", scope="session")
-async def create_sa_engine(
+async def create_test_sa_engine(
     db_config: DBConfig,
     _run_db_migrations: None,
 ) -> AsyncGenerator[AsyncEngine, None]:
-    engine = create_async_engine(db_config.full_url)
+    engine = create_sa_engine(db_config)
+    engine.echo = True
     yield engine
     await engine.dispose()
 
 
 @pytest.fixture(name="sa_session_factory", scope="session")
-async def create_sa_session_factory(
-    sa_engine: AsyncEngine,
-) -> async_sessionmaker:
-    return async_sessionmaker(
-        bind=sa_engine,
-        autoflush=False,
-        expire_on_commit=False,
-    )
+async def create_sa_session_factory(sa_engine: AsyncEngine) -> async_sessionmaker:
+    session_maker = session_factory(sa_engine)
+    session_maker.configure(autoflush=False)
+    return session_maker
 
 
 @pytest.fixture(name="sa_session")

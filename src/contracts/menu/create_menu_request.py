@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 
-@dataclass
+@dataclass(kw_only=True)
 class CreateMenuRequest:
     name: str
     description: str
