@@ -7,6 +7,7 @@ from src.domain.common.vo.average_rating import AverageRating
 from src.domain.dinner.vo.dinner_id import DinnerId
 from src.domain.host.vo.host_id import HostId
 from src.domain.menu.entities.menu_section import MenuSection
+from src.domain.menu.events.menu_created import MenuCreated
 from src.domain.menu.vo.menu_id import MenuId
 from src.domain.menu_review.vo.menu_review_id import MenuReviewId
 
@@ -35,7 +36,7 @@ class Menu(AggregateRoot[MenuId]):
     ) -> Self:
         if sections is None:
             sections = []
-        return cls(
+        menu = cls(
             id=MenuId.create_unique(),
             name=name,
             description=description,
@@ -43,6 +44,10 @@ class Menu(AggregateRoot[MenuId]):
             host_id=host_id,
             _sections=sections,
         )
+
+        menu.add_domain_event(MenuCreated(menu))
+
+        return menu
 
     @property
     def sections(self) -> tuple[MenuSection, ...]:

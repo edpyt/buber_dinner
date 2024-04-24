@@ -99,7 +99,7 @@ async def create_test_sa_engine(
     _run_db_migrations: None,
 ) -> AsyncGenerator[AsyncEngine, None]:
     engine = create_sa_engine(db_config)
-    engine.echo = True
+    # engine.echo = True
     yield engine
     await engine.dispose()
 
