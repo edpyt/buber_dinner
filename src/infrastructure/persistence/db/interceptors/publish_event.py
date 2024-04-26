@@ -11,6 +11,3 @@ def saving_changes(target: type, context: QueryContext, attrs: Optional[set[str]
     :param bob: Base Model
     :param instance: Some instance
     """
-
-    print(target)
-    print("Hello, World!")

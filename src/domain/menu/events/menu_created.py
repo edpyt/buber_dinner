@@ -1,11 +1,9 @@
 from dataclasses import dataclass
-from typing import TypeVar
 
 from src.domain.common.models.domain_event import DomainEvent
-
-TMenu = TypeVar("TMenu")
+from src.domain.menu.menu import Menu
 
 
 @dataclass
 class MenuCreated(DomainEvent):
-    menu: TMenu
+    menu: Menu

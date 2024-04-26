@@ -13,7 +13,7 @@ class Entity(ABC, Generic[TId]):
     _events: list[DomainEvent] = field(default_factory=list)
 
     @property
-    def events(self) -> list[DomainEvent]:
+    def events(self) -> tuple[DomainEvent, ...]:
         return tuple(self._events)
 
     def add_domain_event(self, domain_event: DomainEvent) -> None:
