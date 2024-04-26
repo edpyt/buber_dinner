@@ -17,8 +17,10 @@ class JwtTokenGeneratorImpl(JwtTokenGenerator):
                 "sub": str(user.id),
                 "given_name": user.first_name,
                 "family_name": user.last_name,
-                "exp": self._dt_provider.utc_now()
-                + timedelta(minutes=self._jwt_config.expiry_minutes),
+                "exp": (
+                    self._dt_provider.utc_now()
+                    + timedelta(minutes=self._jwt_config.expiry_minutes)
+                ).timestamp(),
             },
             self._jwt_config.jwt_secret,
         )

@@ -51,7 +51,7 @@ def create_alembic_config(db_config: DBConfig) -> AlembicConfig:
 
 @pytest.fixture(name="jwt_config", scope="session")
 def create_jwt_config() -> JWTConfig:
-    return JWTConfig(jwt_secret="test-secret", expiry_minutes=0)
+    return JWTConfig(jwt_secret="test-secret", expiry_minutes=9999)
 
 
 @pytest.fixture(name="app", scope="session")

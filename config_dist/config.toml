@@ -1,6 +1,6 @@
 [jwt]
 jwt_secret = "super-secret-key"
-expiry_minutes = 10
+expiry_minutes = 60
 
 [db]
 sa_db = "postgresql"
