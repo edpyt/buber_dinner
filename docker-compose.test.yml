@@ -1,4 +1,5 @@
 services:
+  # DinD: https://github.com/testcontainers/testcontainers-python/pull/368
   test:
     container_name: test
     build:
