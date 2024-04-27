@@ -8,7 +8,7 @@ TId = TypeVar("TId")
 
 
 @dataclass(kw_only=True)
-class Entity(ABC, Generic[TId], HasDomainEvents):
+class Entity(ABC, HasDomainEvents, Generic[TId]):
     id: TId
     _events: list[DomainEvent] = field(default_factory=list)
 
