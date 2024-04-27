@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from src.infrastructure.config.db import DBConfig
+from src.infrastructure.persistence.db.interceptors import publish_event  # noqa: F401
 
 
 def create_sa_engine(db_config: DBConfig) -> AsyncEngine:
