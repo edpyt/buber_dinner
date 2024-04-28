@@ -10,14 +10,14 @@ TId = TypeVar("TId")
 @dataclass(kw_only=True)
 class Entity(ABC, HasDomainEvents, Generic[TId]):
     id: TId
-    _events: list[DomainEvent] = field(default_factory=list)
+    _domain_events: list[DomainEvent] = field(default_factory=list)
 
     @property
     def events(self) -> tuple[DomainEvent, ...]:
-        return tuple(self._events)
+        return tuple(self._domain_events)
 
     def add_domain_event(self, domain_event: DomainEvent) -> None:
-        self._events.append(domain_event)
+        self._domain_events.append(domain_event)
 
     def clear_domain_events(self) -> None:
-        self._events.clear()
+        self._domain_events.clear()

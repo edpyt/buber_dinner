@@ -7,10 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.application.menu.dto.average_rating import AverageRatingDTO
 from src.infrastructure.persistence.db.types.dataclass import DataclassType
 
-from .base import Base
+from .base import BaseClass
 
 
-class Menu(Base):
+class Menu(BaseClass):
     __tablename__ = "menu"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
@@ -27,7 +27,7 @@ class Menu(Base):
     updated_date_time: Mapped[datetime]
 
 
-class MenuSection(Base):
+class MenuSection(BaseClass):
     __tablename__ = "menu_sections"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
@@ -40,7 +40,7 @@ class MenuSection(Base):
     menu_id: Mapped[UUID] = mapped_column(ForeignKey("menu.id"), primary_key=True)
 
 
-class MenuItem(Base):
+class MenuItem(BaseClass):
     __tablename__ = "menu_items"
     __table_args__ = (
         ForeignKeyConstraint(
@@ -61,7 +61,7 @@ class MenuItem(Base):
     )
 
 
-class MenuDinnerIds(Base):
+class MenuDinnerIds(BaseClass):
     __tablename__ = "menu_dinner_ids"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
@@ -69,7 +69,7 @@ class MenuDinnerIds(Base):
     dinner_id: Mapped[UUID] = mapped_column(ForeignKey("dinner.id"))
 
 
-class MenuReviewIds(Base):
+class MenuReviewIds(BaseClass):
     __tablename__ = "menu_review_ids"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)

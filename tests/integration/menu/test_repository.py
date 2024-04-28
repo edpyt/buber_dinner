@@ -18,6 +18,7 @@ async def test_add_menu(menu_repo: MenuRepository) -> None:
         host_id=HostId.create_unique(),
     )
     menu_db = MenuDB(
+        entity=menu,
         id=menu.id.value,
         name=menu.name,
         description=menu.description,
