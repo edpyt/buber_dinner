@@ -1,8 +1,10 @@
 from typing import Any, Optional
 
+from mediatr import Mediator
 from sqlalchemy import event
 from sqlalchemy.orm import Mapper, QueryContext
 
+from src.infrastructure.di import build_application_container
 from src.infrastructure.persistence.db.extra.sas import sync_as_async
 from src.infrastructure.persistence.db.models.base import BaseClass
 
@@ -21,12 +23,14 @@ async def saving_changes(
     :param attrs: Set of attributes
     """
 
-    await publish_domain_events(target.entity, context)
+    if target.entity and context:
+        await publish_domain_events(target.entity, context)
 
 
-async def publish_domain_events(entity: object | None, context: QueryContext | None) -> None:
-    if not (entity and context):
-        return
+async def publish_domain_events(entity: object, context: QueryContext) -> None:
+    container = build_application_container()
+    mediator = container.resolve(Mediator)  # noqa: F841
+
     # Get hold of domain events
     events = entity.events  # type: ignore [attr-defined]
 
