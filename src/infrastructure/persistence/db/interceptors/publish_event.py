@@ -28,8 +28,7 @@ async def saving_changes(
 
 
 async def publish_domain_events(entity: object, context: QueryContext) -> None:
-    container = build_application_container()
-    mediator = container.resolve(Mediator)  # noqa: F841
+    mediator = build_application_container().resolve(Mediator)
 
     # Get hold of domain events
     events = entity.events  # type: ignore [attr-defined]
@@ -39,5 +38,4 @@ async def publish_domain_events(entity: object, context: QueryContext) -> None:
 
     # Publish domain events
     for domain_event in events:
-        # Call mediator here
-        print(domain_event)  # noqa: T201
+        await mediator.send_async(domain_event)

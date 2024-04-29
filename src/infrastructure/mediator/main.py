@@ -9,6 +9,7 @@ from src.application.common.behaviors.validation import (
     LoginQueryValidationBehavior,
     RegisterCommandValidationBehavior,
 )
+from src.application.dinners.events.dummy_handler import DummyHandler
 from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
 
 
@@ -18,10 +19,12 @@ def handler_class_manager(cls: type, *_, container: ActivationScope) -> object:
     except CannotResolveTypeException:
         return cls()
 
+
 def setup_mediatr(container: ActivationScope) -> Mediator:
     handler_class_manager_ = partial(handler_class_manager, container=container)
 
     setup_handlers()
+    setup_events()
     setup_behaviors()
 
     return Mediator(handler_class_manager=handler_class_manager_)
@@ -32,6 +35,10 @@ def setup_handlers() -> None:
     Mediator.register_handler(LoginQueryHandler)
 
     Mediator.register_handler(CreateMenuCommandHandler)
+
+
+def setup_events() -> None:
+    Mediator.register_handler(DummyHandler)
 
 
 def setup_behaviors() -> None:

@@ -14,6 +14,7 @@ from src.infrastructure.config.db import DBConfig
 def create_sa_engine(db_config: DBConfig) -> AsyncEngine:
     from src.infrastructure.persistence.db.interceptors import publish_event  # noqa: F401
 
+    # BUG: rodi sends `ActivationScope` here
     if isinstance(db_config, ActivationScope):
         db_config = db_config.get(DBConfig)
     return create_async_engine(db_config.full_url)

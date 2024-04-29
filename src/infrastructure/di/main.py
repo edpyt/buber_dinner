@@ -1,4 +1,5 @@
 import logging
+from functools import lru_cache
 
 from rodi import Container
 
@@ -11,6 +12,7 @@ from .mediatr import setup_mediatr_di
 from .persistence import setup_persistence_di
 
 
+@lru_cache
 def build_application_container() -> Container:
     container: Container = Container()
 
