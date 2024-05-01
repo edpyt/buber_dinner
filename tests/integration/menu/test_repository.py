@@ -1,3 +1,4 @@
+import pytest
 from src.application.menu.dto.average_rating import AverageRatingDTO
 from src.application.persistence.menu_repo import MenuRepository
 from src.domain.host.vo.host_id import HostId
@@ -11,6 +12,7 @@ async def test_get_all_menu(menu_repo: MenuRepository) -> None:
     assert resp == []
 
 
+@pytest.mark.skip("Add message broker config and connection")
 async def test_add_menu(menu_repo: MenuRepository) -> None:
     menu = Menu.create(
         name="test",

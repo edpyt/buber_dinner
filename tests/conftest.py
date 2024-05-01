@@ -2,6 +2,8 @@ import asyncio
 
 import pytest
 
+pytest_plugins = ("tests.integration.fixtures",)
+
 
 @pytest.fixture(scope="session")
 def anyio_backend():
