@@ -1,6 +1,7 @@
 from typing import Generator
 
 import pytest
+from adaptix import Retort
 from src.application.common.events.event_bus import EventBus
 from src.application.dinners.events.menu_create_handler import MenuCreateHandler
 from src.infrastructure.event_bus.event_bus import EventBusImpl
@@ -15,7 +16,7 @@ def create_nats_container() -> Generator[NatsContainer, None, None]:
 
 @pytest.fixture(name="event_bus", scope="session")
 def create_event_bus(nats_mq: NatsContainer) -> EventBus:
-    return EventBusImpl(nats_mq)
+    return EventBusImpl(nats_mq, retort=Retort())
 
 
 @pytest.fixture()

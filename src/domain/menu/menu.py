@@ -7,7 +7,6 @@ from src.domain.common.vo.average_rating import AverageRating
 from src.domain.dinner.vo.dinner_id import DinnerId
 from src.domain.host.vo.host_id import HostId
 from src.domain.menu.entities.menu_section import MenuSection
-from src.domain.menu.events.menu_created import MenuCreated
 from src.domain.menu.vo.menu_id import MenuId
 from src.domain.menu_review.vo.menu_review_id import MenuReviewId
 
@@ -34,6 +33,9 @@ class Menu(AggregateRoot[MenuId]):
         host_id: HostId,
         sections: list[MenuSection] | None = None,
     ) -> Self:
+        # FIXME: circular import
+        from src.domain.menu.events.menu_created import MenuCreated
+
         if sections is None:
             sections = []
         menu = cls(
