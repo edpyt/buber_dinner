@@ -9,7 +9,7 @@ from src.application.common.behaviors.validation import (
     LoginQueryValidationBehavior,
     RegisterCommandValidationBehavior,
 )
-from src.application.dinners.events.dummy_handler import DummyHandler
+from src.application.dinners.events.menu_create_handler import MenuCreateHandler
 from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
 
 
@@ -38,7 +38,7 @@ def setup_handlers() -> None:
 
 
 def setup_events() -> None:
-    Mediator.register_handler(DummyHandler)
+    Mediator.register_handler(MenuCreateHandler)
 
 
 def setup_behaviors() -> None:
