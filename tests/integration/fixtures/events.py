@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Generator
+from typing import Generator
 
 import nats
 import pytest
@@ -10,19 +10,23 @@ from src.infrastructure.message_broker.message_broker import MessageBrokerImpl
 from testcontainers.nats import NatsContainer
 
 
-@pytest.fixture(name="nats_mq", scope="session")
-def create_nats_container() -> Generator[NatsContainer, None, None]:
-    with NatsContainer() as nats:
-        yield nats
+@pytest.fixture(name="nats_container", scope="session")
+async def create_nats_container() -> Generator[NatsContainer, None, None]:
+    with NatsContainer() as nats_container:
+        yield nats_container
+
+
+@pytest.fixture(name="nats_conn", scope="session")
+async def connect_nats(nats_container: NatsContainer) -> nats.NATS:
+    conn_url = nats_container.nats_uri()
+    nats_conn = await nats.connect(conn_url)
+    yield nats_conn
+    await nats_conn.close()
 
 
 @pytest.fixture(name="message_broker", scope="session")
-async def create_nats_message_broker(
-    nats_mq: NatsContainer,
-) -> AsyncGenerator[MessageBroker, None]:
-    nats_conn = await nats.connect(nats_mq.nats_uri())
-    yield MessageBrokerImpl(nats_conn)
-    await nats_conn.close()
+async def create_nats_message_broker(nats_conn: nats.NATS) -> MessageBroker:
+    return MessageBrokerImpl(nats_conn)
 
 
 @pytest.fixture(name="event_bus", scope="session")

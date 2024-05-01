@@ -7,4 +7,4 @@ class MenuCreateHandler:
         self._event_bus = event_bus
 
     async def handle(self, notification: MenuCreated) -> None:
-        await self._event_bus.publish_event(notification)
+        await self._event_bus.publish_event(notification, "menu")

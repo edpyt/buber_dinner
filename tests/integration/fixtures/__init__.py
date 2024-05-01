@@ -3,6 +3,7 @@ from .db.db import create_db_config, create_postgres_db
 from .db.migrations import create_alembic_config, run_db_migrations
 from .db.sqla import create_async_sa_session, create_sa_session_factory, create_test_sa_engine
 from .events import (
+    connect_nats,
     create_event_bus,
     create_nats_container,
     create_nats_message_broker,
@@ -28,4 +29,5 @@ __all__ = (
     "create_nats_container",
     "menu_create_handler",
     "create_nats_message_broker",
+    "connect_nats",
 )

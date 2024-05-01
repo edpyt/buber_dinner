@@ -10,9 +10,9 @@ class EventBusImpl(EventBus):
     def __init__(self, message_broker: MessageBroker) -> None:
         self._message_broker = message_broker
 
-    async def publish_event(self, event: Event) -> None:
+    async def publish_event(self, event: Event, key: str = "default") -> None:
         message = self.create_message(event)
-        await self._message_broker.publish_message(message)
+        await self._message_broker.publish_message(message, key)
 
     @staticmethod
     def create_message(event: Event) -> Message:
