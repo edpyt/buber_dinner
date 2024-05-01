@@ -10,6 +10,6 @@ async def test_create_event(menu_create_handler: MenuCreateHandler) -> None:
         host_id=HostId.create_unique(),
     )
     event = menu.events[-1]
+    menu.clear_domain_events()
 
     await menu_create_handler.handle(event)
-    menu.clear_domain_events()

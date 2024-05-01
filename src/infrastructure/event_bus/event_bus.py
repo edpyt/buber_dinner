@@ -1,4 +1,3 @@
-
 import orjson
 
 from src.application.common.events.event import Event
@@ -13,7 +12,8 @@ class EventBusImpl(EventBus):
 
     async def publish_event(self, event: Event) -> None:
         message = self.create_message(event)
-        await self._message_broker.publish_message(message)  # type: ignore
+        await self._message_broker.publish_message(message)
 
-    def create_message(self, event: Event) -> Message:
+    @staticmethod
+    def create_message(event: Event) -> Message:
         return Message(data=orjson.dumps(event).decode())
