@@ -33,7 +33,7 @@ class Menu(AggregateRoot[MenuId]):
         host_id: HostId,
         sections: list[MenuSection] | None = None,
     ) -> Self:
-        # FIXME: circular import
+        # FIXME: circular import error
         from src.domain.menu.events.menu_created import MenuCreated
 
         if sections is None:
