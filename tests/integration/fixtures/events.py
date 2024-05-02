@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import AsyncGenerator, Generator
 
 import nats
 import pytest
@@ -16,20 +16,20 @@ async def create_nats_container() -> Generator[NatsContainer, None, None]:
         yield nats_container
 
 
-@pytest.fixture(name="nats_conn", scope="session")
-async def connect_nats(nats_container: NatsContainer) -> nats.NATS:
+@pytest.fixture(name="nats_conn")
+async def connect_nats(nats_container: NatsContainer) -> AsyncGenerator[nats.NATS, None]:
     conn_url = nats_container.nats_uri()
     nats_conn = await nats.connect(conn_url)
     yield nats_conn
     await nats_conn.close()
 
 
-@pytest.fixture(name="message_broker", scope="session")
+@pytest.fixture(name="message_broker")
 async def create_nats_message_broker(nats_conn: nats.NATS) -> MessageBroker:
     return MessageBrokerImpl(nats_conn)
 
 
-@pytest.fixture(name="event_bus", scope="session")
+@pytest.fixture(name="event_bus")
 def create_event_bus(message_broker: MessageBroker) -> EventBus:
     return EventBusImpl(message_broker)
 
