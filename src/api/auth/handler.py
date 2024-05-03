@@ -10,7 +10,8 @@ class BuberDinnerAuthHandler(AuthenticationHandler):
         header_value = context.get_first_header(b"Authorization")
 
         if header_value:
-            context.identity = Identity({"name": "Abobe"}, "MOCK")
+            # FIXME: add real identity
+            context.identity = Identity({"name": "test"}, "MOCK")
         else:
             context.identity = None
 

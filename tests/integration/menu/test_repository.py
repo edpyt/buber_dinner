@@ -12,7 +12,7 @@ async def test_get_all_menu(menu_repo: MenuRepository) -> None:
     assert resp == []
 
 
-@pytest.mark.skip("Add message broker config and connection")
+@pytest.mark.skip("Error with IoC container. https://github.com/edpyt/buber_dinner/issues/14")
 async def test_add_menu(menu_repo: MenuRepository) -> None:
     menu = Menu.create(
         name="test",

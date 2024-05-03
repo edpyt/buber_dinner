@@ -10,6 +10,10 @@
 - Pydantic
 - PyJWT
 - Structlog
+- SQLAlchemy
+- Alembic
+- orjson
+- nats-py
 
 ## Test
 

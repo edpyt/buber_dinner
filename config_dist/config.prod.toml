@@ -5,8 +5,14 @@ expiry_minutes = 60
 [db]
 sa_db = "postgresql"
 sa_engine = "asyncpg"
-host = "localhost"
+host = "db"
 port = 5432
 database = "buber_dinner"
 user = "buber_dinner"
+password = "buber_dinner"
+
+[broker]
+host = "nats"
+port = 4222
+login = "buber_dinner"
 password = "buber_dinner"

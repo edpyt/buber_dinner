@@ -15,6 +15,7 @@ from src.application.common.behaviors.validation import (
     LoginQueryValidationBehavior,
     RegisterCommandValidationBehavior,
 )
+from src.application.dinners.events.menu_create_handler import MenuCreateHandler
 from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
 from src.infrastructure.mediator.main import setup_mediatr
 
@@ -40,3 +41,4 @@ def setup_auth_mediatr(container: Container) -> None:
 
 def setup_menu_mediatr(container: Container) -> None:
     container.register(CreateMenuCommandHandler)
+    container.register(MenuCreateHandler)

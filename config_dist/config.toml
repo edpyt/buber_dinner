@@ -10,3 +10,9 @@ port = 15432
 database = "buber_dinner"
 user = "buber_dinner"
 password = "buber_dinner"
+
+[broker]
+host = "nats"
+port = 14222
+login = "buber_dinner"
+password = "buber_dinner"

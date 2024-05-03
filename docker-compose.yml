@@ -19,8 +19,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nats:
+        condition: service_started
     environment:
       - BUBER_DINNER_CONFIG_PATH=config_dist/config.prod.toml
+
+  nats:
+    container_name: nats
+    image: nats:alpine3.19
+    command: nats-server --user ${NATS_USER:?err} --pass ${NATS_PASSWORD:?err}
+    ports:
+      - 14222:4222
+    env_file:
+      - ./.env
 
   db:
     container_name: db
