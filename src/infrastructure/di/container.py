@@ -9,7 +9,7 @@ class Container(Protocol):
     and tell if a type is configured.
     """
 
-    def register(self, obj_type: str | type, *args, **kwargs):
+    def register(self, obj_type: str | type, *args, **kwargs) -> None:
         """Registers a type in the container, with optional arguments."""
 
     def resolve(self, obj_type: str | type[T], *args, **kwargs) -> T:
@@ -21,4 +21,6 @@ class Container(Protocol):
         """
 
 
-class DishkaContainer(Container): ...
+class DishkaContainer(Container):
+    def register(self, obj_type: str | type, *args, **kwargs) -> None:
+        ...

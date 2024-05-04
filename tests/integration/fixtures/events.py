@@ -28,11 +28,8 @@ def create_broker_config(nats_container: NatsContainer) -> BrokerConfig:
 async def connect_nats(nats_container: NatsContainer) -> AsyncGenerator[nats.NATS, None]:
     conn_url = nats_container.nats_uri()
 
-    conn = await make_broker_connection(conn_url=conn_url)
-
-    yield conn
-
-    await conn.close()
+    async with make_broker_connection(conn_url=conn_url) as conn:
+        yield conn
 
 
 @pytest.fixture(name="message_broker")
