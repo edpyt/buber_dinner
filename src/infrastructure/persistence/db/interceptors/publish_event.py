@@ -28,7 +28,7 @@ async def saving_changes(
 
 
 async def publish_domain_events(entity: object, context: QueryContext) -> None:
-    mediator = build_application_container().resolve(Mediator)
+    mediator = (await build_application_container()).resolve(Mediator)
 
     # Get hold of domain events
     events = entity.events  # type: ignore [attr-defined]
