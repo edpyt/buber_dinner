@@ -289,6 +289,17 @@ files = [
 ]
 
 [[package]]
+name = "dishka"
+version = "1.1.1"
+description = "Minimal DI framework"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "dishka-1.1.1-py3-none-any.whl", hash = "sha256:08faeffdbc1598971cb7f57c9d54832b729382e0205e737f36f9ee8c659d2d76"},
+    {file = "dishka-1.1.1.tar.gz", hash = "sha256:738a849bb8786ec919c2ae2c7e2579c1f391f88614a3de245eb766cbaa66b636"},
+]
+
+[[package]]
 name = "distlib"
 version = "0.3.8"
 description = "Distribution utilities"
@@ -1444,4 +1455,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "bbafa85eb7ee6044122f239eed1c5df1235dbe5d29dabaab5d482a48c17cbc0a"
+content-hash = "3f120b062db1cb92e659d61b8b45e53171c389d63b91e942792ce49d17c745d9"

@@ -5,12 +5,12 @@ from rodi import Container
 
 from src.infrastructure.converter.retort import setup_retort
 
-from .config import setup_config_di
-from .extra import setup_extra_di
-from .mapper import setup_mapper_di
-from .mediatr import setup_mediatr_di
-from .message_queue import setup_message_queue_di
-from .persistence import setup_persistence_di
+from .dependencies.config import setup_config_di
+from .dependencies.extra import setup_extra_di
+from .dependencies.mapper import setup_mapper_di
+from .dependencies.mediatr import setup_mediatr_di
+from .dependencies.message_queue import setup_message_queue_di
+from .dependencies.persistence import setup_persistence_di
 
 
 @lru_cache
