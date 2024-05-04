@@ -1,7 +1,7 @@
 from functools import partial
 
+from dishka import Container, NoFactoryError
 from mediatr import Mediator
-from rodi import ActivationScope, CannotResolveTypeException
 
 from src.application.authentication.commands.register.handler import RegisterCommandHandler
 from src.application.authentication.queries.login.handler import LoginQueryHandler
@@ -13,14 +13,14 @@ from src.application.dinners.events.menu_create_handler import MenuCreateHandler
 from src.application.menu.commands.create_menu.handler import CreateMenuCommandHandler
 
 
-def handler_class_manager(cls: type, *_, container: ActivationScope) -> object:
+def handler_class_manager(cls: type, *_, container: Container) -> object:
     try:
         return container.get(cls)
-    except CannotResolveTypeException:
+    except NoFactoryError:
         return cls()
 
 
-def setup_mediatr(container: ActivationScope) -> Mediator:
+def setup_mediatr(container: Container) -> Mediator:
     handler_class_manager_ = partial(handler_class_manager, container=container)
 
     setup_handlers()
