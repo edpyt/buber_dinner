@@ -4,8 +4,10 @@ import nats
 import pytest
 from src.application.common.events.event_bus import EventBus
 from src.application.dinners.events.menu_create_handler import MenuCreateHandler
+from src.infrastructure.config.broker import BrokerConfig
 from src.infrastructure.event_bus.event_bus import EventBusImpl
 from src.infrastructure.message_broker.interface import MessageBroker
+from src.infrastructure.message_broker.main import make_broker_connection
 from src.infrastructure.message_broker.message_broker import MessageBrokerImpl
 from testcontainers.nats import NatsContainer
 
@@ -16,12 +18,21 @@ async def create_nats_container() -> Generator[NatsContainer, None, None]:
         yield nats_container
 
 
+@pytest.fixture(name="broker_config", scope="session")
+def create_broker_config(nats_container: NatsContainer) -> BrokerConfig:
+    host, port = nats_container.nats_host_and_port()
+    return BrokerConfig(host=host, port=port)
+
+
 @pytest.fixture(name="nats_conn")
 async def connect_nats(nats_container: NatsContainer) -> AsyncGenerator[nats.NATS, None]:
     conn_url = nats_container.nats_uri()
-    nats_conn = await nats.connect(conn_url)
-    yield nats_conn
-    await nats_conn.close()
+
+    conn = await make_broker_connection(conn_url=conn_url)
+
+    yield conn
+
+    await conn.close()
 
 
 @pytest.fixture(name="message_broker")

@@ -7,9 +7,9 @@ from src.infrastructure.config_loader import read_toml
 
 
 class Config(BaseModel):
-    jwt_config: JWTConfig
-    db_config: DBConfig
-    broker_config: BrokerConfig
+    jwt_config: JWTConfig = JWTConfig(jwt_secret="secret", expiry_minutes=99)  # noqa: S106
+    db_config: DBConfig = DBConfig()
+    broker_config: BrokerConfig = BrokerConfig()
 
 
 def create_config_obj() -> Config:

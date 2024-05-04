@@ -3,13 +3,20 @@ from blacksheep import Application, JSONContent
 from blacksheep.testing import TestClient
 from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository
+from src.infrastructure.config.jwt import JWTConfig
 
 from tests.integration.di import DIOverride, setup_test_di
 
 
 @pytest.fixture
-def di_overrides(user_repo: UserRepository, menu_repo: MenuRepository) -> list[DIOverride]:
-    return [DIOverride(user_repo, UserRepository), DIOverride(menu_repo, MenuRepository)]
+def di_overrides(
+    jwt_config: JWTConfig, user_repo: UserRepository, menu_repo: MenuRepository,
+) -> list[DIOverride]:
+    return [
+        DIOverride(jwt_config),
+        DIOverride(user_repo, UserRepository),
+        DIOverride(menu_repo, MenuRepository),
+    ]
 
 
 @pytest.fixture
