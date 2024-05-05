@@ -11,7 +11,7 @@ from .providers.persistence import PersistenceProvider
 
 
 @lru_cache
-async def build_application_container() -> AsyncContainer:
+def build_application_container() -> AsyncContainer:
     return make_async_container(
         BrokerProvider(),
         ConfigProvider(),

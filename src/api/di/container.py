@@ -1,9 +1,11 @@
 from typing import Protocol, TypeVar
 
+from dishka import AsyncContainer, Container
+
 T = TypeVar("T")
 
 
-class Container(Protocol):
+class BlacksheepContainer(Protocol):
     """
     Generic interface of DI Container that can register and resolve services,
     and tell if a type is configured.
@@ -21,6 +23,6 @@ class Container(Protocol):
         """
 
 
-class DishkaContainer(Container):
-    def register(self, obj_type: str | type, *args, **kwargs) -> None:
-        ...
+class DishkaDI(BlacksheepContainer):
+    def __init__(self, container: AsyncContainer | Container) -> None:
+        self._container = container

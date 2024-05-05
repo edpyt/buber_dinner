@@ -9,7 +9,9 @@ from src.infrastructure.config.jwt import JWTConfig
 class ConfigProvider(Provider):
     scope = Scope.APP
 
-    config = provide(create_config_obj, provides=Config)
+    @provide
+    def config(self) -> Config:
+        return create_config_obj()
 
     @provide
     def jwt_config(self, config: Config) -> JWTConfig:
