@@ -1,6 +1,7 @@
 from functools import partial
 
-from dishka import Container, NoFactoryError
+from dishka import Container
+from dishka.exceptions import NoFactoryError
 from mediatr import Mediator
 
 from src.application.authentication.commands.register.handler import RegisterCommandHandler

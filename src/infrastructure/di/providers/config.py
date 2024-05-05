@@ -10,6 +10,15 @@ class ConfigProvider(Provider):
     scope = Scope.APP
 
     config = provide(create_config_obj, provides=Config)
-    jwt_config = provide(Config.jwt_config, provides=JWTConfig)
-    db_config = provide(Config.db_config, provides=DBConfig)
-    broker_config = provide(Config.broker_config, provides=BrokerConfig)
+
+    @provide
+    def jwt_config(self, config: Config) -> JWTConfig:
+        return config.jwt_config
+
+    @provide
+    def db_config(self, config: Config) -> DBConfig:
+        return config.db_config
+
+    @provide
+    def broker_config(self, config: Config) -> BrokerConfig:
+        return config.broker_config
