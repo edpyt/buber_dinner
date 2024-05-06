@@ -26,3 +26,6 @@ class BlacksheepContainer(Protocol):
 class DishkaDI(BlacksheepContainer):
     def __init__(self, container: AsyncContainer | Container) -> None:
         self._container = container
+
+    # BUG: Can't register in builded dishka container
+    def register(self, obj_type: str | type, *args, **kwargs) -> None: ...
