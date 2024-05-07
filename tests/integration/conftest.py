@@ -1,5 +1,6 @@
 from typing import AsyncGenerator
 
+import logfire
 import pytest
 from blacksheep import Application
 from pytest_mock import MockerFixture
@@ -8,6 +9,8 @@ from src.infrastructure.config.broker import BrokerConfig
 from src.infrastructure.config.config import Config
 from src.infrastructure.config.db import DBConfig
 from src.infrastructure.config.jwt import JWTConfig
+
+logfire.configure(send_to_logfire=False)
 
 
 @pytest.fixture(name="jwt_config", scope="session")

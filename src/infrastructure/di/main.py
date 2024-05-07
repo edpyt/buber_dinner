@@ -1,6 +1,7 @@
 import logging
 from functools import lru_cache
 
+import structlog
 from rodi import Container
 
 from src.infrastructure.converter.retort import setup_retort
@@ -18,7 +19,7 @@ async def build_application_container(container: Container | None = None) -> Con
     if container is None:
         container = Container()
 
-    container.add_instance(logging.getLogger(__name__), logging.Logger)
+    container.add_scoped_by_factory(lambda: structlog.get_logger(), return_type=logging.Logger)
     container.add_instance(setup_retort())
 
     config = setup_config_di(container)

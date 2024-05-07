@@ -1,3 +1,5 @@
+from logging import Logger
+
 from blacksheep import Application
 from nats import NATS
 
@@ -14,7 +16,9 @@ def build_api() -> Application:
     app = Application(show_error_details=True)
     setup_app(app)
 
-    app.on_start += setup_di
+    app.on_start += on_start
+
+    app.on_stop += on_stop
     app.on_stop += close_connections
 
     return app
@@ -32,8 +36,15 @@ def setup_app(app: Application) -> None:
     app.use_authorization()
 
 
-async def setup_di(app: Application) -> None:
-    await build_application_container(app.services)
+async def on_start(app: Application) -> None:
+    container = await build_application_container(app.services)
+    logger = container.resolve(Logger)
+    logger.info("Start buber_dinner application!")
+
+
+async def on_stop(app: Application) -> None:
+    logger = app.services.resolve(Logger)
+    logger.info("Stop buber_dinner application.")
 
 
 async def close_connections(app: Application) -> None:
