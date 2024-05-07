@@ -29,7 +29,10 @@ def create_config(
     )
 
     session_mocker.patch("src.infrastructure.config.config.create_config_obj", return_value=config)
-    session_mocker.patch("src.infrastructure.di.config.create_config_obj", return_value=config)
+    session_mocker.patch(
+        "src.infrastructure.di.providers.config.create_config_obj",
+        return_value=config,
+    )
 
     return config
 

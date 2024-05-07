@@ -4,7 +4,6 @@ from mediatr import Mediator
 from sqlalchemy import event
 from sqlalchemy.orm import Mapper, QueryContext
 
-from src.infrastructure.di import build_application_container
 from src.infrastructure.persistence.db.extra.sas import sync_as_async
 from src.infrastructure.persistence.db.models.base import BaseClass
 
@@ -28,7 +27,7 @@ async def saving_changes(
 
 
 async def publish_domain_events(entity: object, context: QueryContext) -> None:
-    mediator = (await build_application_container()).resolve(Mediator)
+    mediator = Mediator()
 
     # Get hold of domain events
     events = entity.events  # type: ignore [attr-defined]

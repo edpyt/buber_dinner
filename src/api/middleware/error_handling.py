@@ -1,4 +1,4 @@
-from logging import Logger
+import logging
 from typing import Awaitable, Callable
 
 from blacksheep import Request, Response
@@ -11,13 +11,14 @@ from src.api.common.errors.problem_details import (
 from src.application.common.errors.service_exception import IServiceException
 from src.application.common.errors.validation_behavior import ValidationBehaviorError
 
+logger = logging.getLogger(__name__)
+
 
 class ErrorHandlingMiddleware:
     async def __call__(
         self,
         request: Request,
         handler: Callable[[Request], Awaitable[Response]],
-        logger: Logger,
     ) -> Response:
         try:
             response: Response = await handler(request)

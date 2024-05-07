@@ -3,7 +3,6 @@
 ## Dev
 
 - Blacksheep
-- Rodi
 - Guardpost
 - Mediatr
 - Adaptix
@@ -14,9 +13,11 @@
 - Alembic
 - orjson
 - nats-py
+- dishka
 
 ## Test
 
 - pytest
 - pytest-asyncio
+- pytest-mock
 - Testcontainers
