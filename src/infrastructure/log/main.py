@@ -1,6 +1,7 @@
 import logging.config
 
 import structlog
+from logfire.integrations.structlog import LogfireProcessor
 from structlog.processors import CallsiteParameter, CallsiteParameterAdder
 
 from .processors import get_render_processor
@@ -28,6 +29,8 @@ def configure_logging() -> None:
         structlog.processors.UnicodeDecoder(),
         structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
     )
+    logfire_processor = (LogfireProcessor(),)
+
     logging_processors = (structlog.stdlib.ProcessorFormatter.remove_processors_meta,)
     logging_console_processors = (
         *logging_processors,
@@ -47,7 +50,7 @@ def configure_logging() -> None:
 
     logging.basicConfig(handlers=handlers, level="DEBUG")
     structlog.configure(
-        processors=common_processors + structlog_processors,
+        processors=logfire_processor + common_processors + structlog_processors,
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,

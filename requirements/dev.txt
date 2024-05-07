@@ -10,4 +10,5 @@ structlog==24.1.0 ; python_version >= "3.11" and python_version < "4.0"
 uvicorn==0.27.1 ; python_version >= "3.11" and python_version < "4.0"
 nats-py==2.7.2 ; python_version >= "3.11" and python_version < "4.0"
 orjson==3.10.2 ; python_version >= "3.11" and python_version < "4.0"
+logfire[asyncpg]==0.30.0; python_version >= "3.11" and python_version < "4.0"
 -r db.txt

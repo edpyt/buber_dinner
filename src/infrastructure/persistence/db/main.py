@@ -17,6 +17,7 @@ def create_sa_engine(db_config: DBConfig) -> AsyncEngine:
     # BUG: rodi sends `ActivationScope` here
     if isinstance(db_config, ActivationScope):
         db_config = db_config.get(DBConfig)
+
     return create_async_engine(db_config.full_url)
 
 

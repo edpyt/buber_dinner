@@ -18,6 +18,7 @@ adaptix = "^3.0.0b3"
 guardpost = "^1.0.2"
 orjson = "^3.10.2"
 nats-py = "^2.7.2"
+logfire = {extras = ["asyncpg"], version = "^0.30.0"}
 
 [tool.poetry.group.db.dependencies]
 asyncpg = "^0.29.0"

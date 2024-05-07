@@ -5,12 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: dev
-    command: >
-      uvicorn src.api.main:build_api
-              --factory
-              --reload
-              --host 0.0.0.0
-              --port 8000
+    command: python -m src
     volumes:
       - ./src:/app/src/:ro
       - ./config_dist:/app/config_dist:ro

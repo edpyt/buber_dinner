@@ -10,7 +10,10 @@ from src.infrastructure.message_broker.message_broker import MessageBrokerImpl
 
 
 async def setup_message_queue_di(container: Container, config: Config) -> None:
-    nats_conn = await make_broker_connection(conn_url=config.broker_config.full_url)
+    try:
+        nats_conn = await make_broker_connection(conn_url=config.broker_config.full_url)
+    except:  # noqa: E722
+        nats_conn = None
 
     setup_events_di(container)
 
