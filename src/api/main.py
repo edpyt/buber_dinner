@@ -39,7 +39,7 @@ def setup_app(app: Application) -> None:
 async def on_start(app: Application) -> None:
     container = await build_application_container(app.services)
     logger = container.resolve(Logger)
-    logger.info("Start buber_dinner application!")
+    logger.info("Start buber_dinner application")
 
 
 async def on_stop(app: Application) -> None:
