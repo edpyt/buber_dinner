@@ -1,4 +1,4 @@
-from src.application.common.mapper.interface import MenuMapper
+
 from src.application.persistence.menu_repo import MenuRepository
 from src.domain.host.vo.host_id import HostId
 from src.domain.menu.entities.menu_item import MenuItem
@@ -9,8 +9,8 @@ from .command import CreateMenuCommand
 
 
 class CreateMenuCommandHandler:
-    _menu_repository: MenuRepository
-    _menu_mapper: MenuMapper
+    def __init__(self, menu_repository: MenuRepository) -> None:
+        self._menu_repository = menu_repository
 
     async def handle(self, command: CreateMenuCommand) -> Menu:
         menu = Menu.create(
@@ -29,6 +29,7 @@ class CreateMenuCommandHandler:
                 for section in command.sections
             ],
         )
-        menu_persistence = self._menu_mapper.convert_entity_to_persistence_model(menu)  # type: ignore
-        await self._menu_repository.add(menu_persistence)
+
+        await self._menu_repository.add(menu)
+
         return menu

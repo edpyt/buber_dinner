@@ -14,8 +14,8 @@ def create_postgres_db() -> Generator[PostgresContainer, None, None]:
 @pytest.fixture(name="db_config", scope="session")
 def create_db_config(postgres_db: PostgresContainer) -> DBConfig:
     return DBConfig(
-        user="test",
-        database="test",
-        password="test",
+        user=postgres_db.username,
+        database=postgres_db.dbname,
+        password=postgres_db.password,
         port=postgres_db.get_exposed_port("5432"),
     )

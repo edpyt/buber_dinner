@@ -4,6 +4,7 @@ import pytest
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
+from src.application.common.mapper.interface import MenuMapper
 from src.application.dto.user import UserDTO
 from src.application.persistence.menu_repo import MenuRepository
 from src.application.persistence.user_repo import UserRepository
@@ -12,8 +13,8 @@ from src.infrastructure.persistence.repositories.user_repo import UserRepository
 
 
 @pytest.fixture(name="menu_repo")
-def create_menu_repository(sa_session: AsyncSession) -> MenuRepository:
-    return MenuRepositoryImpl(sa_session)
+def create_menu_repository(sa_session: AsyncSession, menu_mapper: MenuMapper) -> MenuRepository:
+    return MenuRepositoryImpl(sa_session, menu_mapper=menu_mapper)
 
 
 @pytest.fixture(name="user_repo")

@@ -10,12 +10,15 @@ from src.contracts.menu.create_menu_request import CreateMenuRequest, MenuItem, 
 
 
 def test_convert_auth_result_to_response(mapper: MainMapper) -> None:
+    # Arrange
     auth_result = AuthenticationResult(
         user=UserDTO(uuid4(), "test", "test", "test", "test"),
         token="test",
     )
-    auth_response = mapper.auth.convert_auth_result_to_response(auth_result)
 
+    auth_response = mapper.auth.convert_auth_result_to_response(auth_result)  # Act
+
+    # Assert
     assert isinstance(auth_response, AuthenticationResponse)
     assert auth_result.user.id == auth_response.id
     assert auth_result.user.first_name == auth_response.first_name
@@ -24,13 +27,16 @@ def test_convert_auth_result_to_response(mapper: MainMapper) -> None:
 
 
 def test_convert_menu_request_to_command(mapper: MainMapper, retort: Retort) -> None:
+    # Arrange
     menu_request = CreateMenuRequest(
         host_id=uuid4(),
         name="test",
         description="test",
         sections=[MenuSection("test", "test", [MenuItem("test", "test")])],
     )
-    menu_command = mapper.menu.convert_create_menu_request_to_command(menu_request)
 
+    menu_command = mapper.menu.convert_create_menu_request_to_command(menu_request)  # Act
+
+    # Assert
     assert isinstance(menu_command, CreateMenuCommand)
     assert retort.dump(menu_request) == retort.dump(menu_command)
